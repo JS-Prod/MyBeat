@@ -1,4 +1,5 @@
 import colorPalettes from './ColorPalettes.js'
+import screenController from '../screens/ScreenController.js'
 
 class ColorController{
     constructor(){
@@ -11,10 +12,6 @@ class ColorController{
         this.sixth = null
         this.black = null
         this.white = null
-    }
-
-    getPalette(){
-        return this
     }
 
     setPalette(palette){
@@ -32,6 +29,6 @@ class ColorController{
 }
 
 const colorController = new ColorController()
-colorController.setPalette(colorPalettes['complementary-beach-house'])
+colorController.setPalette(colorPalettes['monochromatic-burnt-blue'])
 
 export default colorController

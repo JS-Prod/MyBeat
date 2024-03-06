@@ -6,7 +6,7 @@ class ScreenController{
     }
 
     getScreen(){
-        return this.currentScreen
+        return this.currentScreen()
     }
 
     setScreen(screen){
@@ -15,5 +15,4 @@ class ScreenController{
 }
 
 const screenController = new ScreenController()
-screenController.setScreen(screenList.login)
 export default screenController
