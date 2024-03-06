@@ -1,14 +1,11 @@
-import HomeScreen from "../../components/screens/HomeScreen.js"
-import SocialScreen from "../../components/screens/SocialScreen.js"
-import LoginScreen from "../../components/screens/LoginScreen.js"
+import screenList from "./ScreenList"
 
 class ScreenController{
     constructor(){
-        this.currentScreen = LoginScreen()
+        this.currentScreen = screenList.login
     }
 
     getScreen(){
-        console.log('###DEBUG###')
         return this.currentScreen
     }
 
@@ -18,5 +15,5 @@ class ScreenController{
 }
 
 const screenController = new ScreenController()
-
+screenController.setScreen(screenList.login)
 export default screenController
