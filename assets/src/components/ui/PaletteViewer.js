@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native"
-import colorController from "../../classes/colors/CollorController"
+import colorController from "../../classes/colors/CollorController.js"
 
 const PaletteViewer = () => {
     return(

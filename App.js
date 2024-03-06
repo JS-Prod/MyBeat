@@ -9,7 +9,9 @@ import SettingsScreen from './assets/src/components/screens/SettingsScreen.js'
 
 const Drawer = createDrawerNavigator()
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+
+export const PaletteContext = React.createContext()
 
 export default function App() {
   const [paletteName, setPaletteName] = useState(null)
@@ -20,13 +22,15 @@ export default function App() {
 
   return (
       <NavigationContainer>
-        <Drawer.Navigator>
-          <Drawer.Screen name='Login' component={LoginScreen}/>
-          <Drawer.Screen name='Register' component={RegisterScreen}/>
-          <Drawer.Screen name='Home' component={HomeScreen}/>
-          <Drawer.Screen name='Social' component={SocialScreen}/>
-          <Drawer.Screen name='Settings' component={SettingsScreen} initialParams={{setPaletteName: setPaletteName, paletteName: paletteName}}/>
-        </Drawer.Navigator>
+        <PaletteContext.Provider value={paletteName}>
+          <Drawer.Navigator>
+            <Drawer.Screen name='Login' component={LoginScreen}/>
+            <Drawer.Screen name='Register' component={RegisterScreen}/>
+            <Drawer.Screen name='Home' component={HomeScreen}/>
+            <Drawer.Screen name='Social' component={SocialScreen}/>
+            <Drawer.Screen name='Settings' component={SettingsScreen} initialParams={{setPaletteName: setPaletteName}}/>
+          </Drawer.Navigator>
+        </PaletteContext.Provider>
       </NavigationContainer>
   )
 }

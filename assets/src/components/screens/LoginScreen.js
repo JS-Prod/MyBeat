@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable  } from 'react-native'
 import colorController from '../../classes/colors/CollorController.js'
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
+import { PaletteContext } from '../../../../App.js'
 
 const LoginScreen = () => {
+    const currentPalette = useContext(PaletteContext)
+
     useEffect(()=>{
-        console.log('Rerender Login Screen.')
-    },[colorController.first])
+        console.log('Rerendering Login Screen.')
+    },[currentPalette])
 
     return (
         <SafeAreaView style={getStyles().loginScreen}>
