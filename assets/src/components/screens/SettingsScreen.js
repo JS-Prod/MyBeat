@@ -4,16 +4,16 @@ import colorController from '../../classes/colors/CollorController'
 import ThemePicker from '../ui/ThemePicker'
 import PaletteViewer from '../ui/PaletteViewer'
 
-const SettingsScreen = () => {
-    const [paletteName, setPaletteName] = useState(colorController.name)
+const SettingsScreen = ({route}) => {
+    const [rerender, setRerender] = useState(colorController.name)
 
     useEffect(()=>{
         console.log('Rerender setting screen.')
-    }, [paletteName])
+    }, [rerender])
 
     return (
         <SafeAreaView style={getStyles().settingsScreen}>
-            <ThemePicker setPaletteName={setPaletteName}/>
+            <ThemePicker setPaletteName={route.params.setPaletteName} setRerender={setRerender}/>
             <PaletteViewer/>
         </SafeAreaView>
     )

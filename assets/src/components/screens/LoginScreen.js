@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable  } from 'react-native'
 import colorController from '../../classes/colors/CollorController.js'
-import PaletteViewer from '../ui/PaletteViewer.js'
+import { useEffect } from 'react'
 
 const LoginScreen = () => {
+    useEffect(()=>{
+        console.log('Rerender Login Screen.')
+    },[colorController.first])
+
     return (
         <SafeAreaView style={getStyles().loginScreen}>
             <View style={getStyles().credentialContainer}>

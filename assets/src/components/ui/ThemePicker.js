@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 
 
-const ThemePicker = ({setPaletteName}) => {
+const ThemePicker = ({setPaletteName, setRerender}) => {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
     const [items, setItems] = useState([...Object.keys(colorPalettes).map((value) => {return{label: value, value: value}})])
@@ -14,6 +14,7 @@ const ThemePicker = ({setPaletteName}) => {
         if(value){
             colorController.setPalette(colorPalettes[value])
             setPaletteName(colorController.name)
+            setRerender(colorController.name)
         } else {
             setValue(colorController.name)
         }
