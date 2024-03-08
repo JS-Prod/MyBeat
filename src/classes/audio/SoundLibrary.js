@@ -1,4 +1,4 @@
-import testClick from '../../../TestClick.mp3'
+import testClick from '../../../assets/audio-files/TestClick.mp3'
 
 const soundLibrary = {
     testClick1: testClick,

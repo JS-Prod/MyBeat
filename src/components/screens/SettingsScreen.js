@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable  } from 'react-native'
-import { useEffect, useState, useContext} from 'react'
-import colorController from '../../classes/colors/CollorController'
+import { StyleSheet, SafeAreaView } from 'react-native'
+import { useEffect, useContext} from 'react'
+import colorController from '../../classes/colors/CollorController.js'
 import ThemePicker from '../ui/ThemePicker'
 import PaletteViewer from '../ui/PaletteViewer'
-import { PaletteContext } from '../../../../App'
+import { PaletteContext } from '../../../App.js'
 
 const SettingsScreen = ({route}) => {
     const currentPalette = useContext(PaletteContext)

@@ -3,13 +3,13 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import React, { useEffect, useState } from 'react'
 
-import HomeScreen from './assets/src/components/screens/HomeScreen.js'
-import LoginScreen from './assets/src/components/screens/LoginScreen.js'
-import RegisterScreen from './assets/src/components/screens/RegisterScreen.js'
-import SocialScreen from './assets/src/components/screens/SocialScreen.js'
-import SettingsScreen from './assets/src/components/screens/SettingsScreen.js'
+import HomeScreen from './src/components/screens/HomeScreen.js'
+import LoginScreen from './src/components/screens/LoginScreen.js'
+import RegisterScreen from './src/components/screens/RegisterScreen.js'
+import SocialScreen from './src/components/screens/SocialScreen.js'
+import SettingsScreen from './src/components/screens/SettingsScreen.js'
 
-import audioMixer from './assets/src/classes/audio/AudioMixer.js'
+import audioMixer from './src/classes/audio/AudioMixer.js'
 import { Button } from 'react-native'
 
 

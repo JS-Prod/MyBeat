@@ -13,10 +13,6 @@ class ColorController{
         this.white = null
     }
 
-    getPalette(){
-        return this
-    }
-
     setPalette(palette){
         this.name = palette.name 
         this.first = palette.first
@@ -32,6 +28,6 @@ class ColorController{
 }
 
 const colorController = new ColorController()
-colorController.setPalette(colorPalettes['complementary-beach-house'])
+colorController.setPalette(colorPalettes['monochromatic-burnt-blue'])
 
 export default colorController
