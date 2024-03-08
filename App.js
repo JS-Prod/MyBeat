@@ -8,9 +8,20 @@ import LoginScreen from './src/components/screens/LoginScreen.js'
 import RegisterScreen from './src/components/screens/RegisterScreen.js'
 import SocialScreen from './src/components/screens/SocialScreen.js'
 import SettingsScreen from './src/components/screens/SettingsScreen.js'
+import GameScreen from './src/components/screens/GameScreen.js'
 
 import audioMixer from './src/classes/audio/AudioMixer.js'
-import { Button } from 'react-native'
+
+//TODO: 
+//Login/Register => Home/Play/Settings/Leaderboard
+//ValidatorContext
+//GameScreenComponent (?)
+//GameButtonsComponent
+//GameOverCompoennt
+//GameTimer
+//KeyGenerator
+//SequenceController
+//ScoreController
 
 
 const Drawer = createDrawerNavigator()
@@ -21,6 +32,7 @@ export default function App() {
 
   useEffect(()=>{
     console.log('Rerender entire component tree.')
+    audioMixer.playSound('testClick1')
   },[paletteName])
 
   //Cordova, Evan Bacon
@@ -32,17 +44,10 @@ export default function App() {
             <Drawer.Screen name='Login' component={LoginScreen}/>
             <Drawer.Screen name='Register' component={RegisterScreen}/>
             <Drawer.Screen name='Home' component={HomeScreen}/>
+            <Drawer.Screen name='Game' component={GameScreen}/>
             <Drawer.Screen name='Social' component={SocialScreen}/>
             <Drawer.Screen name='Settings' component={SettingsScreen} initialParams={{setPaletteName: setPaletteName}}/>
           </Drawer.Navigator>
-          <Button title='button' onPress={()=>{
-            console.log('CLICKED BUTTON 1')
-            audioMixer.playSound('testClick1')
-            }}/>
-          <Button title='button' onPress={()=>{
-            console.log('CLICKED BUTTON 2')
-            audioMixer.playSound('testClick2')
-            }}/>
         </PaletteContext.Provider>
       </NavigationContainer>
   )
