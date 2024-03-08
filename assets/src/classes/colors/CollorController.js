@@ -1,5 +1,4 @@
 import colorPalettes from './ColorPalettes.js'
-import screenController from '../screens/ScreenController.js'
 
 class ColorController{
     constructor(){

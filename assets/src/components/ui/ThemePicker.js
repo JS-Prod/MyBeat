@@ -4,9 +4,6 @@ import colorController from '../../classes/colors/CollorController'
 import { useEffect, useState } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 
-
-
-
 const ThemePicker = ({setPaletteName}) => {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)

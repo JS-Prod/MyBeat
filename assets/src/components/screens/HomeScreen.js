@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
-import colorController from '../../classes/colors/CollorController'
-import { PaletteContext } from '../../../../App'
 import { useContext, useEffect } from 'react'
+import { PaletteContext } from '../../../../App'
+import colorController from '../../classes/colors/CollorController'
+
 
 const HomeScreen = () => {
     const currentPalette = useContext(PaletteContext)
@@ -9,7 +10,7 @@ const HomeScreen = () => {
     useEffect(()=>{
         console.log('Rerendering Home Screen.')
     },[currentPalette])
-    
+
     return (
         <View style={getStyles().homeScreen}>
             <Text>This is the HOME screen.</Text>
