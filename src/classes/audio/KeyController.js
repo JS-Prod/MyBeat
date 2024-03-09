@@ -23,7 +23,7 @@ class MajorScales{
 class KeyController{
     constructor(){
         this.currentKey = null
-        //this.chromatic = chromaticScale
+        this.chromatic = chromaticScale
         this.major = new MajorScales()
     }
 
@@ -38,5 +38,7 @@ class KeyController{
 }
 
 const keyController = new KeyController()
+
+keyController.selectRandomKey()
 
 export default keyController
