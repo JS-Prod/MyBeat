@@ -12,7 +12,7 @@ const GameScreen = () => {
     const currentPalette = useContext(PaletteContext)
 
     useEffect(()=>{
-        console.log('Rerendering Home Screen.')
+        console.log('Rerendering Game Screen.')
     },[currentPalette])
 
     const numRows = 3
@@ -34,11 +34,9 @@ const GameScreen = () => {
     }
 
     return (
-        // <TouchableWithoutFeedback>
-            <View style={getStyles().gameScreen}>
-                {buttons}
-            </View>
-        //</TouchableWithoutFeedback>
+        <View style={getStyles().gameScreen}>
+            {buttons}
+        </View>
     )
 }
 

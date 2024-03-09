@@ -2,6 +2,7 @@ import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import React, { useEffect, useState } from 'react'
+import { Button } from 'react-native'
 
 import HomeScreen from './src/components/screens/HomeScreen.js'
 import LoginScreen from './src/components/screens/LoginScreen.js'
@@ -15,11 +16,8 @@ import audioMixer from './src/classes/audio/AudioMixer.js'
 //TODO: 
 //Login/Register => Home/Play/Settings/Leaderboard
 //ValidatorContext
-//GameScreenComponent (?)
-//GameButtonsComponent
 //GameOverCompoennt
 //GameTimer
-//KeyGenerator
 //SequenceController
 //ScoreController
 
