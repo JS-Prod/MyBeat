@@ -6,6 +6,8 @@ import { GameContext } from "../game-controller/GameController.js"
 import colorController from "../../classes/colors/CollorController.js"
 import sequencer from "../../classes/sequencer/Sequencer.js"
 
+import audioMixer from "../../classes/audio/AudioMixer.js"
+
 const GameButton = ({setPlaybackNote, index, note}) => {
     const [isPressed, setIsPressed] = useState(false)
     const playbackContext = useContext(PlaybackContext)
@@ -15,6 +17,7 @@ const GameButton = ({setPlaybackNote, index, note}) => {
 
     function handlePressStart(){
         if(gameContext.canPress){
+            audioMixer.playSound('testClick1')
             setIsPressed(true)
             gameContext.setScore(prev => prev + 10)
             gameContext.setTestString('Hello World.')
@@ -27,6 +30,7 @@ const GameButton = ({setPlaybackNote, index, note}) => {
 
     async function handlePlayback(){
         setIsPressed(true)
+        audioMixer.playSound('testClick1')
         setTimeout(() => {
             setIsPressed(false)
             setTimeout(()=>{
