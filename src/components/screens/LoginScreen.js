@@ -3,11 +3,14 @@ import colorController from '../../classes/colors/CollorController.js'
 import { useEffect, useContext } from 'react'
 import { PaletteContext } from '../../../App.js'
 
+import audioMixer from '../../classes/audio/AudioMixer.js'
+
 const LoginScreen = () => {
     const currentPalette = useContext(PaletteContext)
 
     useEffect(()=>{
         console.log('Rerendering Login Screen.')
+        audioMixer.playSound('testClick1')
     },[currentPalette])
 
     return (

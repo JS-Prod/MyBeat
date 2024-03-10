@@ -1,5 +1,4 @@
 import keyController from "../audio/KeyController"
-import GameScreen from "../../components/screens/GameScreen"
 
 class Sequencer {
     constructor(){
@@ -7,10 +6,10 @@ class Sequencer {
         this.playbackQueue = []
         this.playerSequence = []
     }
+    
     extendSequence(){
         const randomIndex = (Math.floor(Math.random() * keyController.currentKey.length) + 1) - 1
-        this.currentSequence.push(keyController.currentKey[randomIndex])
-        this.startSequencePlayback()
+        this.currentSequence.unshift(keyController.currentKey[randomIndex])
     }
 
     playerInput(input){
@@ -22,13 +21,12 @@ class Sequencer {
 
     clearSequence(){
         this.currentSequence.length = 0
+        this.playbackQueue.length = 0
         this.playerSequence.length = 0
     }
 
-    async startSequencePlayback(){
+    startSequencePlayback(){
         this.playbackQueue = [...this.currentSequence]
-        console.log('Playback Queue: ' + this.playbackQueue)
-        console.log('Starting Sequence Playback.')
     }
 }
 

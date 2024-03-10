@@ -2,7 +2,6 @@ import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import React, { useEffect, useState } from 'react'
-import { Button } from 'react-native'
 
 import HomeScreen from './src/components/screens/HomeScreen.js'
 import LoginScreen from './src/components/screens/LoginScreen.js'
@@ -11,7 +10,8 @@ import SocialScreen from './src/components/screens/SocialScreen.js'
 import SettingsScreen from './src/components/screens/SettingsScreen.js'
 import GameScreen from './src/components/screens/GameScreen.js'
 
-import audioMixer from './src/classes/audio/AudioMixer.js'
+import GameController from './src/components/game-controller/GameController.js'
+
 
 //TODO: 
 //Login/Register => Home/Play/Settings/Leaderboard
@@ -26,6 +26,8 @@ const Drawer = createDrawerNavigator()
 export const PaletteContext = React.createContext()
 export const PlaybackContext = React.createContext()
 export const PlaybackIndexContext = React.createContext()
+
+import audioMixer from './src/classes/audio/AudioMixer.js'
 
 export default function App() {
   const [paletteName, setPaletteName] = useState(null)
@@ -44,6 +46,7 @@ export default function App() {
 
   return (
       <NavigationContainer>
+        <GameController>
         <PaletteContext.Provider value={paletteName}>
         <PlaybackContext.Provider value={playbackNote?.note}>
         <PlaybackIndexContext.Provider value={playbackNote?.index}>
@@ -58,6 +61,7 @@ export default function App() {
         </PlaybackIndexContext.Provider>
         </PlaybackContext.Provider>
         </PaletteContext.Provider>
+        </GameController>
       </NavigationContainer>
   )
 }

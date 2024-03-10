@@ -1,29 +1,40 @@
 import { Button, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { useIsFocused } from '@react-navigation/native'
 import { PaletteContext } from '../../../App.js'
 import colorController from '../../classes/colors/CollorController.js'
 import GameButton from '../ui/GameButton.js'
 import sequencer from '../../classes/sequencer/Sequencer.js'
 import keyController from '../../classes/audio/KeyController.js'
 
+import { GameContext } from '../game-controller/GameController.js'
+
+
+
 const GameScreen = ({route}) => {
     const currentPalette = useContext(PaletteContext)
+    const gameContext = useContext(GameContext)
+    const isFocused = useIsFocused()
     
     useEffect(()=>{
-        console.log('Rerendering Game Screen.')
     },[currentPalette])
+
+    useEffect(()=>{
+        if(isFocused){
+            console.log('GAME SCREEN FOCUSED.')
+            gameContext.someRandomFunction()
+        }
+        else console.log('GAME SCREEN UNFOCUSED.')
+    },[isFocused])
 
     function startPlayback(){
         sequencer.startSequencePlayback()
         const nextNote = sequencer.playbackQueue.pop()
-        console.log('Next Note: ' + nextNote)
         route.params.setPlaybackNote({note: nextNote, index: sequencer.playbackQueue.length})
     }
 
     function extendSequence(){
-        console.log('Adding to sequence.')
         sequencer.extendSequence()
-        console.log('Sequence: ' + sequencer.currentSequence)
     }
 
     const numRows = 3
