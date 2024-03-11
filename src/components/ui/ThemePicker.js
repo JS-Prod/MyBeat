@@ -9,13 +9,11 @@ const ThemePicker = () => {
     const appContext = useContext(AppContext)
 
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState(null)
+    const [value, setValue] = useState(appContext.currentPalette.name)
     const [items, setItems] = useState([...Object.keys(colorPalettes).map((value) => {return{label: value, value: value}})])
 
     useEffect(()=>{
-        if(value){
-            appContext.setCurrentPalette(colorPalettes[value])
-        } 
+        appContext.setCurrentPalette(colorPalettes[value])
     },[value])
 
     return(

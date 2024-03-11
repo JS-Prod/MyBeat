@@ -3,8 +3,7 @@ import soundLibrary from './SoundLibrary.js'
 
 class AudioMixer {
     constructor(soundLibrary) {
-        console.log('Building Audio Mixer')
-        console.log('VERIFY LIBRARY: ' + JSON.stringify(soundLibrary,0,2))
+        console.log('Initializing Audio Mixer')
         this.sounds = {}
         this.initializeSounds(soundLibrary)
     }
