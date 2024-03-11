@@ -1,11 +1,13 @@
 import React, { useContext, useEffect } from 'react'
-import { Button, StyleSheet, View } from 'react-native'
+import { Button, StyleSheet, View, SafeAreaView } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { AppContext } from '../game-controller/AppController.js'
 import { GameContext } from '../game-controller/GameController.js'
 import GameButton from '../ui/GameButton.js'
 import sequencer from '../../classes/sequencer/Sequencer.js'
 import keyController from '../../classes/audio/KeyController.js'
+
+import CountdownTimer from '../ui/CountdownTimer.js'
 
 
 const GameScreen = () => {
@@ -20,6 +22,8 @@ const GameScreen = () => {
     useEffect(()=>{
         if(isFocused){
             console.log('GAME SCREEN FOCUSED.')
+            gameContext.setSeconds(5)
+            gameContext.setIsCountdown(true)
         }
         else console.log('GAME SCREEN UNFOCUSED.')
     },[isFocused])
@@ -51,13 +55,16 @@ const GameScreen = () => {
     }
 
     return (
-        <View style={getStyles(appContext).gameScreen}>
+        <SafeAreaView style={getStyles(appContext).gameScreen}>
+            <View style={getStyles(appContext).timer}>
+                <CountdownTimer />
+            </View>
             {buttons}
-            <View style={{flex: 1}}>
+            <View style={getStyles(appContext).container}>
                 <Button title='Add to Sequence' onPress={extendSequence}/>
                 <Button title='Start Playback' onPress={startPlayback}/>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -71,6 +78,17 @@ const getStyles = (appContext) => {
             backgroundColor: appContext.currentPalette.first,
             alignItems: 'center',
             justifyContent: 'center'
+        },
+        container:{
+            flex: 1,
+            flexDirection: 'row',
+            position: 'absolute',
+            bottom: 0,
+            margin: 20
+        },
+        timer:{
+            position: 'absolute',
+            height: '75%'
         }
     })
 }

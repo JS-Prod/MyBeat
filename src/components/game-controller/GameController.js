@@ -4,7 +4,7 @@ export const GameContext = React.createContext()
 
 const GameController = ({children}) => {
     const [seconds, setSeconds] = useState(5)
-    const [isCountdown, setIsCountdown] = useState(true)
+    const [isCountdown, setIsCountdown] = useState(false)
     const [score, setScore] = useState(0)
     const [isGameActive, setIsGameActive] = useState(false)
     const [isPlayerTurn, setIsPlayerTurn] = useState(false)
@@ -24,10 +24,10 @@ const GameController = ({children}) => {
         }
         return () => {
             clearInterval(interval)
-            if(seconds < 1){
+            if(seconds <= 0){
                 setIsCountdown(false)
+                setSeconds('Game Over')
                 console.log('GAME OVER')
-
             }
         }
     },[isCountdown, seconds])
@@ -69,8 +69,12 @@ const GameController = ({children}) => {
         setCanPress: setCanPress,
         isPlayerTurn: isPlayerTurn,
         setIsPlayerTurn: setIsPlayerTurn,
+        isCountdown: isCountdown,
+        setIsCountdown: setIsCountdown,
         playbackNote: playbackNote,
         setPlaybackNote: setPlaybackNote,
+        seconds: seconds,
+        setSeconds: setSeconds,
         addTime: addTime
     }}>
         {children}
