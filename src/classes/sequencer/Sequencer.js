@@ -6,7 +6,7 @@ class Sequencer {
         this.playbackQueue = []
         this.playerSequence = []
     }
-    
+
     extendSequence(){
         const randomIndex = (Math.floor(Math.random() * keyController.currentKey.length) + 1) - 1
         this.currentSequence.unshift(keyController.currentKey[randomIndex])
@@ -25,8 +25,12 @@ class Sequencer {
         this.playerSequence.length = 0
     }
 
-    startSequencePlayback(){
+    initPlaybackQueue(){
         this.playbackQueue = [...this.currentSequence]
+    }
+
+    popPlaybackQueue(){
+        return {note: this.playbackQueue.pop(), index: this.playbackQueue.length}
     }
 }
 

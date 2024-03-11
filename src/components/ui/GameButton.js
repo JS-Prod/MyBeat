@@ -1,26 +1,31 @@
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { useContext, useEffect, useState } from "react"
-import { PlaybackContext, PlaybackIndexContext } from "../../../App.js"
 import { GameContext } from "../game-controller/GameController.js"
 
 import colorController from "../../classes/colors/CollorController.js"
 import sequencer from "../../classes/sequencer/Sequencer.js"
-
 import audioMixer from "../../classes/audio/AudioMixer.js"
 
-const GameButton = ({setPlaybackNote, index, note}) => {
-    const [isPressed, setIsPressed] = useState(false)
-    const playbackContext = useContext(PlaybackContext)
-    const playbackIndex = useContext(PlaybackIndexContext)
+const GameButton = ({note}) => {
     const gameContext = useContext(GameContext)
+    const [isPressed, setIsPressed] = useState(false)
 
+    useEffect(()=>{
+        if(isPressed)console.log('Rerender press color.')
+        else console.log('Rerender inactive color.')
+    },[isPressed])
+
+    useEffect(()=>{
+        if(gameContext?.playbackNote?.note === note) {
+            console.log(`Active playback note ${note}`)
+            handlePlayback()
+        }
+    },[gameContext.playbackNote?.index])
 
     function handlePressStart(){
         if(gameContext.canPress){
             audioMixer.playSound('testClick1')
             setIsPressed(true)
-            gameContext.setScore(prev => prev + 10)
-            gameContext.setTestString('Hello World.')
         }
     }
 
@@ -35,21 +40,14 @@ const GameButton = ({setPlaybackNote, index, note}) => {
             setIsPressed(false)
             setTimeout(()=>{
                 if(sequencer.playbackQueue.length > 0){
-                    const nextNote = sequencer.playbackQueue.pop()
-                    setPlaybackNote({note: nextNote, index: sequencer.playbackQueue.length})
+                    //setPlaybackNote(sequencer.popPlaybackQueue())
+                    gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
                 } else {
                     gameContext.setIsPlayerTurn(true)
                 }
             }, 400)
         }, 400);
     }
-
-    useEffect(()=>{
-    },[isPressed])
-
-    useEffect(()=>{
-        if(playbackContext === note){handlePlayback()}
-    },[playbackIndex])
 
     return(
         <TouchableWithoutFeedback onPressIn={handlePressStart} onPressOut={handlePressEnd}>

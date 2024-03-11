@@ -1,36 +1,33 @@
-import { Button, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Button, StyleSheet, View } from 'react-native'
 import React, { useContext, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native'
 import { PaletteContext } from '../../../App.js'
+import { GameContext } from '../game-controller/GameController.js'
 import colorController from '../../classes/colors/CollorController.js'
 import GameButton from '../ui/GameButton.js'
 import sequencer from '../../classes/sequencer/Sequencer.js'
 import keyController from '../../classes/audio/KeyController.js'
 
-import { GameContext } from '../game-controller/GameController.js'
 
-
-
-const GameScreen = ({route}) => {
+const GameScreen = () => {
     const currentPalette = useContext(PaletteContext)
     const gameContext = useContext(GameContext)
     const isFocused = useIsFocused()
     
     useEffect(()=>{
+        console.log('Rerender for palette change.')
     },[currentPalette])
 
     useEffect(()=>{
         if(isFocused){
             console.log('GAME SCREEN FOCUSED.')
-            gameContext.someRandomFunction()
         }
         else console.log('GAME SCREEN UNFOCUSED.')
     },[isFocused])
 
     function startPlayback(){
-        sequencer.startSequencePlayback()
-        const nextNote = sequencer.playbackQueue.pop()
-        route.params.setPlaybackNote({note: nextNote, index: sequencer.playbackQueue.length})
+        sequencer.initPlaybackQueue()
+        gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
     }
 
     function extendSequence(){
@@ -45,7 +42,7 @@ const GameScreen = ({route}) => {
         const row = []
         for (let j = 0; j < numColumns; j++) {
             const index = i * numColumns + j
-            row.push(<GameButton key={index} index={index} note={keyController.chromatic[index]} setPlaybackNote={route.params.setPlaybackNote} />)
+            row.push(<GameButton key={index} note={keyController.chromatic[index]}/>)
         }
         buttons.push(
             <View key={i} >

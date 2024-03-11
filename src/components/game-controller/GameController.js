@@ -3,16 +3,17 @@ import React, { useState, useEffect } from "react"
 export const GameContext = React.createContext()
 
 const GameController = ({children}) => {
+    const [seconds, setSeconds] = useState(0)
     const [score, setScore] = useState(0)
-    const [testString, setTestString] = useState(null)
     const [isGameActive, setIsGameActive] = useState(false)
     const [isPlayerTurn, setIsPlayerTurn] = useState(false)
     const [canPress, setCanPress] = useState(true)
-    const [seconds, setSeconds] = useState(0)
 
-    function someRandomFunction(){
-        console.log('Called some random function.')
-    }
+    const [playbackNote, setPlaybackNote] = useState(null)
+
+    useEffect(()=>{
+        console.log('Playback INDEX change.', JSON.stringify(playbackNote,0,2))
+    },[playbackNote?.index])
 
     useEffect(()=>{
         console.log('Score Changed To: ' + score)
@@ -29,15 +30,12 @@ const GameController = ({children}) => {
     },[isPlayerTurn])
 
     useEffect(()=>{
-        console.log('Test String Changed To: ' + testString)
-    }, [testString])
-
-    useEffect(()=>{
         if(canPress) console.log('Pressing button enabled.')
         else console.log('Pressing buttons disabled.')
     },[canPress])
 
     useEffect(()=>{
+        console.log('Seconds remaining: ' + seconds)
         if(seconds <= 0) console.log('GAME OVER.')
     },[seconds])
 
@@ -45,15 +43,14 @@ const GameController = ({children}) => {
     <GameContext.Provider value={{
         score: score, 
         setScore: setScore,
-        testString: testString,
-        setTestString: setTestString,
         isGameActive: isGameActive,
         setIsGameActive: setIsGameActive,
         canPress: canPress,
         setCanPress: setCanPress,
         isPlayerTurn: isPlayerTurn,
         setIsPlayerTurn: setIsPlayerTurn,
-        someRandomFunction: someRandomFunction
+        playbackNote: playbackNote,
+        setPlaybackNote: setPlaybackNote,
     }}>
         {children}
     </GameContext.Provider>
