@@ -1,31 +1,31 @@
 import { StyleSheet, SafeAreaView } from 'react-native'
 import { useEffect, useContext} from 'react'
-import colorController from '../../classes/colors/CollorController.js'
+import { AppContext } from '../game-controller/AppController.js'
+
 import ThemePicker from '../ui/ThemePicker'
 import PaletteViewer from '../ui/PaletteViewer'
-import { PaletteContext } from '../../../App.js'
 
-const SettingsScreen = ({route}) => {
-    const currentPalette = useContext(PaletteContext)
+const SettingsScreen = () => {
+   const appContext = useContext(AppContext)
 
     useEffect(()=>{
-        console.log('Rerender setting screen.')
-    }, [currentPalette])
+        console.log('Rerender setting screen for palette change.')
+    },[appContext.currentPalette.name])
 
     return (
-        <SafeAreaView style={getStyles().settingsScreen}>
-            <ThemePicker setPaletteName={route.params.setPaletteName}/>
+        <SafeAreaView style={getStyles(appContext).settingsScreen}>
+            <ThemePicker/>
             <PaletteViewer/>
         </SafeAreaView>
     )
 }
 
-const getStyles = () => {
+const getStyles = (appContext) => {
     return StyleSheet.create({
         settingsScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: colorController.second,
+            backgroundColor: appContext.currentPalette.second,
             justifyContent: 'center'
         }
     })

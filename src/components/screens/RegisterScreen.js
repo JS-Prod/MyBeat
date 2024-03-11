@@ -1,28 +1,27 @@
 import { StyleSheet, Text, View } from 'react-native'
-import colorController from '../../classes/colors/CollorController'
-import { PaletteContext } from '../../../App.js'
 import { useContext, useEffect } from 'react'
+import { AppContext } from '../game-controller/AppController'
 
 const RegisterScreen = () => {
-    const currentPalette = useContext(PaletteContext)
+    const appContext = useContext(AppContext)
     
     useEffect(()=>{
-        console.log('Rerendering Register Screen.')
-    }, [currentPalette])
+        console.log('Rerender register screen for palette change.')
+    }, [appContext.currentPalette.name])
 
     return (
-        <View style={getStyles().registerScreen}>
+        <View style={getStyles(appContext).registerScreen}>
             <Text>This is the REGISTER screen.</Text>
         </View>
     )
 }
 
-const getStyles = () => {
+const getStyles = (appContext) => {
     return StyleSheet.create({
         registerScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: colorController.fifth,
+            backgroundColor: appContext.currentPalette.fifth,
             alignItems: 'center',
             justifyContent: 'center'
         }

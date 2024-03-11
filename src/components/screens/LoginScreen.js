@@ -1,40 +1,36 @@
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable  } from 'react-native'
-import colorController from '../../classes/colors/CollorController.js'
 import { useEffect, useContext } from 'react'
-import { PaletteContext } from '../../../App.js'
-
-import audioMixer from '../../classes/audio/AudioMixer.js'
+import { AppContext } from '../game-controller/AppController.js'
 
 const LoginScreen = () => {
-    const currentPalette = useContext(PaletteContext)
+    const appContext = useContext(AppContext)
 
     useEffect(()=>{
-        console.log('Rerendering Login Screen.')
-        audioMixer.playSound('testClick1')
-    },[currentPalette])
+        console.log('Rerender login screen for palette change.')
+    },[appContext.currentPalette.name])
 
     return (
-        <SafeAreaView style={getStyles().loginScreen}>
-            <View style={getStyles().credentialContainer}>
+        <SafeAreaView style={getStyles(appContext).loginScreen}>
+            <View style={getStyles(appContext).credentialContainer}>
                 <TextInput 
-                    style={getStyles().credentialInput}
+                    style={getStyles(appContext).credentialInput}
                     autoCorrect={false}
                     placeholder='Username'
                 />
-                <Pressable style={getStyles().button}>
-                    <Text style={getStyles().buttonText}>Join</Text>
+                <Pressable style={getStyles(appContext).button}>
+                    <Text style={getStyles(appContext).buttonText}>Join</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
     )
 }
 
-const getStyles = () => {
+const getStyles = (appContext) => {
     return StyleSheet.create({
         loginScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: colorController.second,
+            backgroundColor: appContext.currentPalette.second,
             alignItems: 'center',
             justifyContent: 'flex-end'
         },
@@ -46,7 +42,7 @@ const getStyles = () => {
         credentialInput:{
             width: '100%',
             height: 50,
-            backgroundColor: colorController.third,
+            backgroundColor: appContext.currentPalette.third,
             textAlign: 'center',
      
             fontSize: 16,
@@ -56,7 +52,7 @@ const getStyles = () => {
             alignItems: 'center',
             width: '100%',
             height: 50,
-            backgroundColor: colorController.fourth,
+            backgroundColor: appContext.currentPalette.fourth,
             justifyContent: 'flex-end',
             marginBottom: 10
         },

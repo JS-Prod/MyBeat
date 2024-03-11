@@ -1,27 +1,28 @@
 import { StyleSheet, Text, View } from 'react-native'
-import colorController from '../../classes/colors/CollorController.js'
 import { useContext, useEffect } from 'react'
-import { PaletteContext } from '../../../App.js'
+import { AppContext } from '../game-controller/AppController.js'
+
 
 const SocialScreen = () => {
-    const currentPalette = useContext(PaletteContext)
+    const appContext = useContext(AppContext)
+
     useEffect(()=>{
-        console.log('Rerendering Social Screen.')
-    },[currentPalette])
+        console.log('Rerender social screen for palette change.')
+    },[appContext.currentPalette.name])
     
     return (
-        <View style={getStyles().socialScreen}>
+        <View style={getStyles(appContext).socialScreen}>
             <Text>This is the SOCIAL screen.</Text>
         </View>
     )
 }
 
-const getStyles = () => {
+const getStyles = (appContext) => {
     return StyleSheet.create({
         socialScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: colorController.sixth,
+            backgroundColor: appContext.currentPalette.fifth,
             alignItems: 'center',
             justifyContent: 'center'
         }

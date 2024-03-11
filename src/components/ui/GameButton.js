@@ -1,13 +1,15 @@
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../game-controller/GameController.js"
+import { AppContext } from "../game-controller/AppController.js"
 
-import colorController from "../../classes/colors/CollorController.js"
 import sequencer from "../../classes/sequencer/Sequencer.js"
 import audioMixer from "../../classes/audio/AudioMixer.js"
 
 const GameButton = ({note}) => {
     const gameContext = useContext(GameContext)
+    const appContext = useContext(AppContext)
+
     const [isPressed, setIsPressed] = useState(false)
 
     useEffect(()=>{
@@ -40,7 +42,6 @@ const GameButton = ({note}) => {
             setIsPressed(false)
             setTimeout(()=>{
                 if(sequencer.playbackQueue.length > 0){
-                    //setPlaybackNote(sequencer.popPlaybackQueue())
                     gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
                 } else {
                     gameContext.setIsPlayerTurn(true)
@@ -51,17 +52,17 @@ const GameButton = ({note}) => {
 
     return(
         <TouchableWithoutFeedback onPressIn={handlePressStart} onPressOut={handlePressEnd}>
-            <View style={getStyles(isPressed).gameButton} />
+            <View style={getStyles(isPressed, appContext).gameButton} />
         </TouchableWithoutFeedback>
     )
 }
 
-const getStyles = (isPressed) => {
+const getStyles = (isPressed, appContext) => {
     return StyleSheet.create({
         gameButton:{
             height: 100,
             width: 100, 
-            backgroundColor: isPressed ? colorController.sixth : colorController.fourth,
+            backgroundColor: isPressed ? appContext.currentPalette.sixth : appContext.currentPalette.fourth,
             margin: 10
         }
     })

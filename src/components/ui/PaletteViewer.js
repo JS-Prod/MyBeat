@@ -1,20 +1,23 @@
 import { View, StyleSheet } from "react-native"
-import colorController from "../../classes/colors/CollorController.js"
+import { useContext } from "react"
+import { AppContext } from "../game-controller/AppController.js"
 
 const PaletteViewer = () => {
+    const appContext = useContext(AppContext)
+
     return(
-    <View style={getStyles().blockContainer}>
-        <View style={getStyles().block1}></View>
-        <View style={getStyles().block2}></View>
-        <View style={getStyles().block3}></View>
-        <View style={getStyles().block4}></View>
-        <View style={getStyles().block5}></View>
-        <View style={getStyles().block6}></View>
+    <View style={getStyles(appContext).blockContainer}>
+        <View style={getStyles(appContext).block1}></View>
+        <View style={getStyles(appContext).block2}></View>
+        <View style={getStyles(appContext).block3}></View>
+        <View style={getStyles(appContext).block4}></View>
+        <View style={getStyles(appContext).block5}></View>
+        <View style={getStyles(appContext).block6}></View>
     </View>
     )
 }
 
-const getStyles = () => {
+const getStyles = (appContext) => {
     const borderWidth = 2
     return StyleSheet.create({
         blockContainer:{
@@ -31,54 +34,54 @@ const getStyles = () => {
             textAlign: 'center',
             width: 75,
             height: 75,
-            backgroundColor: colorController.first,
+            backgroundColor: appContext.currentPalette.first,
             borderWidth: borderWidth,
-            borderColor: colorController.black
+            borderColor: appContext.currentPalette.black
         },
         block2:{
             flex: 1,
             textAlign: 'center',
             width: 75,
             height: 75,
-            backgroundColor: colorController.second,
+            backgroundColor: appContext.currentPalette.second,
             borderWidth: borderWidth,
-            borderColor: colorController.black
+            borderColor: appContext.currentPalette.black
         },
         block3:{
             flex: 1,
             textAlign: 'center',
             width: 75,
             height: 75,
-            backgroundColor: colorController.third,
+            backgroundColor: appContext.currentPalette.third,
             borderWidth: borderWidth,
-            borderColor: colorController.black
+            borderColor: appContext.currentPalette.black
         },
         block4:{
             flex: 1,
             textAlign: 'center',
             width: 75,
             height: 75,
-            backgroundColor: colorController.fourth,
+            backgroundColor: appContext.currentPalette.fourth,
             borderWidth: borderWidth,
-            borderColor: colorController.black
+            borderColor: appContext.currentPalette.black
         },
         block5:{
             flex: 1,
             textAlign: 'center',
             width: 75,
             height: 75,
-            backgroundColor: colorController.fifth,
+            backgroundColor: appContext.currentPalette.fifth,
             borderWidth: borderWidth,
-            borderColor: colorController.black
+            borderColor: appContext.currentPalette.black
         },
         block6:{
             flex: 1,
             textAlign: 'center',
             width: 75,
             height: 75,
-            backgroundColor: colorController.sixth,
+            backgroundColor: appContext.currentPalette.sixth,
             borderWidth: borderWidth,
-            borderColor: colorController.black
+            borderColor: appContext.currentPalette.black
         }
     })
 }

@@ -1,22 +1,21 @@
-import { Button, StyleSheet, View } from 'react-native'
 import React, { useContext, useEffect } from 'react'
+import { Button, StyleSheet, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
-import { PaletteContext } from '../../../App.js'
+import { AppContext } from '../game-controller/AppController.js'
 import { GameContext } from '../game-controller/GameController.js'
-import colorController from '../../classes/colors/CollorController.js'
 import GameButton from '../ui/GameButton.js'
 import sequencer from '../../classes/sequencer/Sequencer.js'
 import keyController from '../../classes/audio/KeyController.js'
 
 
 const GameScreen = () => {
-    const currentPalette = useContext(PaletteContext)
+    const appContext = useContext(AppContext)
     const gameContext = useContext(GameContext)
     const isFocused = useIsFocused()
     
     useEffect(()=>{
-        console.log('Rerender for palette change.')
-    },[currentPalette])
+        console.log('Rerender game screen for palette change.')
+    },[appContext.currentPalette.name])
 
     useEffect(()=>{
         if(isFocused){
@@ -52,7 +51,7 @@ const GameScreen = () => {
     }
 
     return (
-        <View style={getStyles().gameScreen}>
+        <View style={getStyles(appContext).gameScreen}>
             {buttons}
             <View style={{flex: 1}}>
                 <Button title='Add to Sequence' onPress={extendSequence}/>
@@ -62,14 +61,14 @@ const GameScreen = () => {
     )
 }
 
-const getStyles = () => {
+const getStyles = (appContext) => {
     return StyleSheet.create({
         gameScreen:{
             flex: 1,
             flexDirection: 'row',
             width: '100%',
             height: '100%',
-            backgroundColor: colorController.first,
+            backgroundColor: appContext.currentPalette.first,
             alignItems: 'center',
             justifyContent: 'center'
         }

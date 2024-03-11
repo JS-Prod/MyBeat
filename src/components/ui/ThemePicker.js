@@ -1,21 +1,21 @@
+import { useEffect, useState, useContext } from 'react'
+import { View, StyleSheet, Text } from 'react-native'
+import { AppContext } from '../game-controller/AppController'
+
 import DropDownPicker from 'react-native-dropdown-picker'
 import colorPalettes from '../../classes/colors/ColorPalettes'
-import colorController from '../../classes/colors/CollorController'
-import { useEffect, useState } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
 
-const ThemePicker = ({setPaletteName}) => {
+const ThemePicker = () => {
+    const appContext = useContext(AppContext)
+
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
     const [items, setItems] = useState([...Object.keys(colorPalettes).map((value) => {return{label: value, value: value}})])
 
     useEffect(()=>{
         if(value){
-            colorController.setPalette(colorPalettes[value])
-            setPaletteName(value)
-        } else {
-            setValue(colorController.name)
-        }
+            appContext.setCurrentPalette(colorPalettes[value])
+        } 
     },[value])
 
     return(
