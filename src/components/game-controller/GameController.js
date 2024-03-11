@@ -3,13 +3,38 @@ import React, { useState, useEffect } from "react"
 export const GameContext = React.createContext()
 
 const GameController = ({children}) => {
-    const [seconds, setSeconds] = useState(0)
+    const [seconds, setSeconds] = useState(5)
+    const [isCountdown, setIsCountdown] = useState(true)
     const [score, setScore] = useState(0)
     const [isGameActive, setIsGameActive] = useState(false)
     const [isPlayerTurn, setIsPlayerTurn] = useState(false)
     const [canPress, setCanPress] = useState(true)
-
     const [playbackNote, setPlaybackNote] = useState(null)
+
+    function addTime(){
+        setSeconds(prev => prev + 1)
+    }
+
+    useEffect(()=>{
+        let interval = null
+        if(isCountdown){
+            interval = setInterval(()=>{
+                setSeconds(prev => prev - 1)
+            }, 1000)
+        }
+        return () => {
+            clearInterval(interval)
+            if(seconds < 1){
+                setIsCountdown(false)
+                console.log('GAME OVER')
+
+            }
+        }
+    },[isCountdown, seconds])
+
+    useEffect(()=>{
+        console.log('Seconds:', seconds)
+    },[seconds])
 
     useEffect(()=>{
         console.log('Playback INDEX change.', JSON.stringify(playbackNote,0,2))
@@ -34,11 +59,6 @@ const GameController = ({children}) => {
         else console.log('Pressing buttons disabled.')
     },[canPress])
 
-    useEffect(()=>{
-        console.log('Seconds remaining: ' + seconds)
-        if(seconds <= 0) console.log('GAME OVER.')
-    },[seconds])
-
     return(
     <GameContext.Provider value={{
         score: score, 
@@ -51,6 +71,7 @@ const GameController = ({children}) => {
         setIsPlayerTurn: setIsPlayerTurn,
         playbackNote: playbackNote,
         setPlaybackNote: setPlaybackNote,
+        addTime: addTime
     }}>
         {children}
     </GameContext.Provider>

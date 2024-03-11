@@ -2,6 +2,7 @@ import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { useContext, useEffect, useState } from "react"
 import { GameContext } from "../game-controller/GameController.js"
 import { AppContext } from "../game-controller/AppController.js"
+import * as Haptics from 'expo-haptics'
 
 import sequencer from "../../classes/sequencer/Sequencer.js"
 import audioMixer from "../../classes/audio/AudioMixer.js"
@@ -26,7 +27,9 @@ const GameButton = ({note}) => {
 
     function handlePressStart(){
         if(gameContext.canPress){
+            gameContext.addTime()
             audioMixer.playSound('testClick1')
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
             setIsPressed(true)
         }
     }
