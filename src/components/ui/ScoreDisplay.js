@@ -3,29 +3,28 @@ import { StyleSheet, Text, SafeAreaView } from 'react-native'
 import { GameContext } from '../game-controller/GameController'
 
 
-const CountdownTimer = () => {
+const ScoreDisplay = () => {
     const gameContext = useContext(GameContext)
 
     useEffect(()=>{
-
-    }, [gameContext.seconds])
+    }, [gameContext.score])
 
     return(
-        <SafeAreaView style={styles.themePickerContainer}>
-            <Text style={styles.timerText}>{gameContext.seconds}</Text>
+        <SafeAreaView style={styles.scoreDisplay}>
+            <Text style={styles.scoreText}>SCORE: {gameContext.score}</Text>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    themePickerContainer:{
+    scoreDisplay:{
         width: '100%',
         justifyContent: 'center'
     },
-    timerText:{
+    scoreText:{
         fontSize:40,
         fontWeight: 'bold'
     }
 })
 
-export default CountdownTimer
+export default ScoreDisplay

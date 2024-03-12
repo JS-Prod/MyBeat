@@ -13,10 +13,10 @@ const GameButton = ({note}) => {
 
     const [isPressed, setIsPressed] = useState(false)
 
-    useEffect(()=>{
-        if(isPressed)console.log('Rerender press color.')
-        else console.log('Rerender inactive color.')
-    },[isPressed])
+    // useEffect(()=>{
+    //     if(isPressed)console.log('Rerender press color.')
+    //     else console.log('Rerender inactive color.')
+    // },[isPressed])
 
     useEffect(()=>{
         if(gameContext?.playbackNote?.note === note) {
@@ -27,10 +27,23 @@ const GameButton = ({note}) => {
 
     function handlePressStart(){
         if(gameContext.canPress){
-            gameContext.addTime()
-            audioMixer.playSound('testClick1')
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
             setIsPressed(true)
+            const validatorObj = sequencer.playerInput(note)
+            console.log('Validator OBJ:' + JSON.stringify(validatorObj,0,2))
+            if(validatorObj.isCorrect){
+                audioMixer.playSound('testClick1')
+                gameContext.setScore(prev => prev + 10)
+                gameContext.addTime()
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                if(validatorObj.isFinal){
+                    gameContext.roundSuccess()
+                }
+            } else {
+                audioMixer.playSound('testClick1')
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+                console.log('End Game:', 'handlePressStart')
+                gameContext.endGame()
+            }
         }
     }
 
@@ -44,13 +57,9 @@ const GameButton = ({note}) => {
         setTimeout(() => {
             setIsPressed(false)
             setTimeout(()=>{
-                if(sequencer.playbackQueue.length > 0){
-                    gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
-                } else {
-                    gameContext.setIsPlayerTurn(true)
-                }
-            }, 400)
-        }, 400);
+                gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
+            },500)
+        }, 500)
     }
 
     return(

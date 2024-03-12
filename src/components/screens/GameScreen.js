@@ -4,10 +4,11 @@ import { useIsFocused } from '@react-navigation/native'
 import { AppContext } from '../game-controller/AppController.js'
 import { GameContext } from '../game-controller/GameController.js'
 import GameButton from '../ui/GameButton.js'
-import sequencer from '../../classes/sequencer/Sequencer.js'
 import keyController from '../../classes/audio/KeyController.js'
 
 import CountdownTimer from '../ui/CountdownTimer.js'
+import MessageDisplay from '../ui/MessageDisplay.js'
+import ScoreDisplay from '../ui/ScoreDisplay.js'
 
 
 const GameScreen = () => {
@@ -22,20 +23,10 @@ const GameScreen = () => {
     useEffect(()=>{
         if(isFocused){
             console.log('GAME SCREEN FOCUSED.')
-            gameContext.setSeconds(5)
-            gameContext.setIsCountdown(true)
+            gameContext.initNewGame()
         }
         else console.log('GAME SCREEN UNFOCUSED.')
     },[isFocused])
-
-    function startPlayback(){
-        sequencer.initPlaybackQueue()
-        gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
-    }
-
-    function extendSequence(){
-        sequencer.extendSequence()
-    }
 
     const numRows = 3
     const numColumns = 4
@@ -57,12 +48,11 @@ const GameScreen = () => {
     return (
         <SafeAreaView style={getStyles(appContext).gameScreen}>
             <View style={getStyles(appContext).timer}>
-                <CountdownTimer />
+                {gameContext.showDisplayMessage ? (<MessageDisplay />) : (<CountdownTimer />)}
             </View>
             {buttons}
-            <View style={getStyles(appContext).container}>
-                <Button title='Add to Sequence' onPress={extendSequence}/>
-                <Button title='Start Playback' onPress={startPlayback}/>
+            <View style={getStyles(appContext).score}>
+                <ScoreDisplay/>
             </View>
         </SafeAreaView>
     )
@@ -79,6 +69,10 @@ const getStyles = (appContext) => {
             alignItems: 'center',
             justifyContent: 'center'
         },
+        score:{
+            position: 'absolute',
+            bottom: '10%'
+        },
         container:{
             flex: 1,
             flexDirection: 'row',
@@ -92,6 +86,5 @@ const getStyles = (appContext) => {
         }
     })
 }
-
 
 export default GameScreen
