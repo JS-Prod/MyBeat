@@ -13,11 +13,6 @@ const GameButton = ({note}) => {
 
     const [isPressed, setIsPressed] = useState(false)
 
-    // useEffect(()=>{
-    //     if(isPressed)console.log('Rerender press color.')
-    //     else console.log('Rerender inactive color.')
-    // },[isPressed])
-
     useEffect(()=>{
         if(gameContext?.playbackNote?.note === note) {
             console.log(`Active playback note ${note}`)
@@ -58,8 +53,8 @@ const GameButton = ({note}) => {
             setIsPressed(false)
             setTimeout(()=>{
                 gameContext.setPlaybackNote(sequencer.popPlaybackQueue())
-            },500)
-        }, 500)
+            },(gameContext.pauseMS/4))
+        },(gameContext.pauseMS/4)*3)
     }
 
     return(

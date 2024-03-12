@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 
 import sequencer from "../../classes/sequencer/Sequencer"
 import keyController from "../../classes/audio/KeyController"
@@ -6,7 +6,10 @@ import keyController from "../../classes/audio/KeyController"
 export const GameContext = React.createContext()    
 
 const GameController = ({children}) => {
-    const [seconds, setSeconds] = useState(5)
+    const countdownLength = 3
+    const pauseMS = 800
+
+    const [seconds, setSeconds] = useState(countdownLength)
     const [isCountdown, setIsCountdown] = useState(false)
     const [score, setScore] = useState(0)
     const [isPlayerTurn, setIsPlayerTurn] = useState(false)
@@ -14,6 +17,9 @@ const GameController = ({children}) => {
     const [playbackNote, setPlaybackNote] = useState(null)
     const [displayMessage, setDisplayMessage] = useState('')
     const [showDisplayMessage, setShowDisplayMessage] = useState(false)
+
+    const timeoutRef = useRef(null)
+
 
     function addTime(){
         setSeconds(prev => prev + 1)
@@ -23,33 +29,35 @@ const GameController = ({children}) => {
         sequencer.clearSequence()
         keyController.selectRandomKey()
         setScore(0)
+        setCanPress(false)
         setPlaybackNote(null)
         startRound()
     }
 
     function startRound(){
+        setIsPlayerTurn(false)
+        setIsCountdown(false)
         setDisplayMessage('LISTEN')
         setShowDisplayMessage(true)
-        setCanPress(false)
-        setIsCountdown(false)
-        setIsPlayerTurn(false)
         setTimeout(()=>{
-            console.log('Starting Playback Queue')
             sequencer.extendSequence()
             sequencer.initPlaybackQueue()
             setPlaybackNote(sequencer.popPlaybackQueue())
-        },1000)
+        },pauseMS)
     }
 
     function roundSuccess(){
+        setIsCountdown(false)
+        setCanPress(false)
         setDisplayMessage('CORRECT')
         setShowDisplayMessage(true)
+        clearTimeout(timeoutRef.current)
         setTimeout(()=>{
             setDisplayMessage('NEXT ROUND')
             setTimeout(()=>{
                 startRound()
-            },1000)
-        },1000)
+            },pauseMS)
+        },pauseMS)
     }
 
     function endGame(){
@@ -65,7 +73,7 @@ const GameController = ({children}) => {
         if(isCountdown){
             interval = setInterval(()=>{
                 setSeconds(prev => prev - 1)
-            }, 1000)
+            },pauseMS)
         }
         return () => {
             clearInterval(interval)
@@ -75,7 +83,6 @@ const GameController = ({children}) => {
         }
     },[isCountdown, seconds])
 
-
     useEffect(()=>{
         if(isPlayerTurn) {
             setTimeout(()=>{
@@ -83,19 +90,20 @@ const GameController = ({children}) => {
                 setTimeout(()=>{
                     setDisplayMessage('GO')
                     setCanPress(true)
-                    setTimeout(()=>{
-                        setSeconds(5)
-                        setShowDisplayMessage(false)
+                    timeoutRef.current = setTimeout(()=>{
+                        setSeconds(countdownLength)
                         setIsCountdown(true)
-                    },1000)
-                },1000)
-            },1000)
-        } 
+                        setShowDisplayMessage(false)
+                    },pauseMS)
+                },pauseMS)
+            },pauseMS)
+        }
     },[isPlayerTurn])
 
 
     useEffect(()=>{
         if(playbackNote?.index <= 0){
+            console.log('Final note. Set to Player turn.')
             setIsPlayerTurn(true)
         } 
     },[playbackNote?.index])
@@ -120,15 +128,13 @@ const GameController = ({children}) => {
         showDisplayMessage: showDisplayMessage,
         setShowDisplayMessage: setShowDisplayMessage,
         initNewGame: initNewGame,
-        startRound: startRound,
         endGame: endGame,
-        roundSuccess: roundSuccess
+        roundSuccess: roundSuccess,
+        pauseMS: pauseMS
     }}>
         {children}
     </GameContext.Provider>
     )
 }
-
-
 
 export default GameController
