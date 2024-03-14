@@ -26,11 +26,12 @@ const GameController = ({children}) => {
     }
 
     function initNewGame(){
+        setCanPress(false)
         sequencer.clearSequence()
         keyController.selectRandomKey()
         setScore(0)
-        setCanPress(false)
         setPlaybackNote(null)
+
         startRound()
     }
 
@@ -39,7 +40,7 @@ const GameController = ({children}) => {
         setIsCountdown(false)
         setDisplayMessage('LISTEN')
         setShowDisplayMessage(true)
-        setTimeout(()=>{
+        timeoutRef.current = setTimeout(()=>{
             sequencer.extendSequence()
             sequencer.initPlaybackQueue()
             setPlaybackNote(sequencer.popPlaybackQueue())
@@ -52,9 +53,9 @@ const GameController = ({children}) => {
         setDisplayMessage('CORRECT')
         setShowDisplayMessage(true)
         clearTimeout(timeoutRef.current)
-        setTimeout(()=>{
+        timeoutRef.current = setTimeout(()=>{
             setDisplayMessage('NEXT ROUND')
-            setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
                 startRound()
             },pauseMS)
         },pauseMS)
@@ -62,8 +63,8 @@ const GameController = ({children}) => {
 
     function endGame(){
         setIsCountdown(false)
-        setSeconds(0)
         setCanPress(false)
+        clearTimeout(timeoutRef.current)    
         setDisplayMessage('GAME OVER')
         setShowDisplayMessage(true)
     }
@@ -85,9 +86,9 @@ const GameController = ({children}) => {
 
     useEffect(()=>{
         if(isPlayerTurn) {
-            setTimeout(()=>{
+            timeoutRef.current = setTimeout(()=>{
                 setDisplayMessage('READY')
-                setTimeout(()=>{
+                timeoutRef.current = setTimeout(()=>{
                     setDisplayMessage('GO')
                     setCanPress(true)
                     timeoutRef.current = setTimeout(()=>{

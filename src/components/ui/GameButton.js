@@ -24,7 +24,6 @@ const GameButton = ({note}) => {
         if(gameContext.canPress){
             setIsPressed(true)
             const validatorObj = sequencer.playerInput(note)
-            console.log('Validator OBJ:' + JSON.stringify(validatorObj,0,2))
             if(validatorObj.isCorrect){
                 audioMixer.playSound(note)
                 gameContext.setScore(prev => prev + 10)
@@ -36,7 +35,6 @@ const GameButton = ({note}) => {
             } else {
                 audioMixer.playSound('fail')
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-                console.log('End Game:', 'handlePressStart')
                 gameContext.endGame()
             }
         }
