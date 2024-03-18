@@ -26,7 +26,7 @@ const getStyles = (appContext) => StyleSheet.create({
     playBox:{
         height: 100,
         width: 200,
-        backgroundColor: appContext.currentPalette.fifth,
+        backgroundColor: appContext.currentPalette.sixth,
         justifyContent: 'center'
     },
     playText:{

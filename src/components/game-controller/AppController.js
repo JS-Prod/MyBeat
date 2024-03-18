@@ -5,8 +5,8 @@ import * as Haptics from 'expo-haptics'
 export const AppContext = React.createContext()
 
 const AppController = ({children}) => {
-    const [currentPalette, setCurrentPalette] = useState(colorPalettes['complementary-beach-house'])
-    const [isLoggedIn, setIsLoggedIn] = useState(true)
+    const [currentPalette, setCurrentPalette] = useState(colorPalettes['monochromatic-burnt-blue'])
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     useEffect(()=>{
         console.log('Current palette:', currentPalette)
