@@ -21,7 +21,7 @@ const getStyles = (appContext) => {
         registerScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: appContext.currentPalette.fifth,
+            backgroundColor: appContext.currentPalette.second,
             alignItems: 'center',
             justifyContent: 'center'
         }

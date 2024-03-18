@@ -25,7 +25,7 @@ const getStyles = (appContext) => {
         settingsScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: appContext.currentPalette.second,
+            backgroundColor: appContext.currentPalette.fourth,
             justifyContent: 'center'
         }
     })

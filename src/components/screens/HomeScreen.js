@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { useContext, useEffect } from 'react'
 import { AppContext } from '../game-controller/AppController.js'
+import PlayButton from '../ui/home/PlayButton.js'
 
 
 const HomeScreen = () => {
@@ -12,7 +13,7 @@ const HomeScreen = () => {
 
     return (
         <View style={getStyles(appContext).homeScreen}>
-            <Text>This is the HOME screen.</Text>
+            <PlayButton/>
         </View>
     )
 }
@@ -22,9 +23,9 @@ const getStyles = (appContext) => {
         homeScreen:{
             width: '100%',
             height: '100%',
-            backgroundColor: appContext.currentPalette.first,
+            backgroundColor: appContext.currentPalette.fourth,
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
         }
     })
 }

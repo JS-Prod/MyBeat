@@ -1,14 +1,15 @@
 import React, { useContext, useEffect } from 'react'
-import { Button, StyleSheet, View, SafeAreaView } from 'react-native'
+import { StyleSheet, View, SafeAreaView } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 import { AppContext } from '../game-controller/AppController.js'
 import { GameContext } from '../game-controller/GameController.js'
-import GameButton from '../ui/GameButton.js'
 import keyController from '../../classes/audio/KeyController.js'
 
-import CountdownTimer from '../ui/CountdownTimer.js'
-import MessageDisplay from '../ui/MessageDisplay.js'
-import ScoreDisplay from '../ui/ScoreDisplay.js'
+import GameButton from '../ui/game/GameButton.js'
+import CountdownTimer from '../ui/game/CountdownTimer.js'
+import MessageDisplay from '../ui/game/MessageDisplay.js'
+import ScoreDisplay from '../ui/game/ScoreDisplay.js'
+import EndGameButtons from '../ui/game/EndGameButtons.js'
 
 
 const GameScreen = () => {
@@ -47,12 +48,16 @@ const GameScreen = () => {
 
     return (
         <SafeAreaView style={getStyles(appContext).gameScreen}>
-            <View style={getStyles(appContext).timer}>
+            <View style={getStyles(appContext).timerSection}>
                 {gameContext.showDisplayMessage ? (<MessageDisplay />) : (<CountdownTimer />)}
             </View>
-            {buttons}
-            <View style={getStyles(appContext).score}>
-                <ScoreDisplay/>
+            <View style={getStyles(appContext).buttonSection}>
+                {buttons}
+            </View>
+            <View style={getStyles(appContext).scoreSection}>
+                {/* <ScoreDisplay/> */}
+                {gameContext.displayMessage === 'GAME OVER' || gameContext.displayMessage === 'NEW HIGHSCORE' ? <ScoreDisplay isAlone={false}/> : <ScoreDisplay isAlone={true}/>}
+                {gameContext.displayMessage === 'GAME OVER' || gameContext.displayMessage === 'NEW HIGHSCORE' ? <EndGameButtons/> : null}
             </View>
         </SafeAreaView>
     )
@@ -61,28 +66,23 @@ const GameScreen = () => {
 const getStyles = (appContext) => {
     return StyleSheet.create({
         gameScreen:{
-            flex: 1,
-            flexDirection: 'row',
-            width: '100%',
             height: '100%',
             backgroundColor: appContext.currentPalette.first,
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            paddingBottom: 25 
         },
-        score:{
-            position: 'absolute',
-            bottom: '10%'
-        },
-        container:{
-            flex: 1,
+        buttonSection:{
             flexDirection: 'row',
-            position: 'absolute',
-            bottom: 0,
-            margin: 20
         },
-        timer:{
+        scoreSection:{
             position: 'absolute',
-            height: '75%'
+            bottom: '5%',
+            alignItems: 'center'
+        },
+        timerSection:{
+            position: 'absolute',
+            height: '82%'
         }
     })
 }

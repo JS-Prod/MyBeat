@@ -6,6 +6,7 @@ export const AppContext = React.createContext()
 
 const AppController = ({children}) => {
     const [currentPalette, setCurrentPalette] = useState(colorPalettes['complementary-beach-house'])
+    const [isLoggedIn, setIsLoggedIn] = useState(true)
 
     useEffect(()=>{
         console.log('Current palette:', currentPalette)
@@ -15,7 +16,9 @@ const AppController = ({children}) => {
     return(
     <AppContext.Provider value={{
         currentPalette: currentPalette,
-        setCurrentPalette: setCurrentPalette
+        setCurrentPalette: setCurrentPalette,
+        isLoggedIn: isLoggedIn,
+        setIsLoggedIn: setIsLoggedIn
     }}>
         {children}
     </AppContext.Provider>

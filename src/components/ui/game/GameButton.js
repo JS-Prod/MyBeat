@@ -1,11 +1,11 @@
 import { View, StyleSheet, TouchableWithoutFeedback } from "react-native"
 import { useContext, useEffect, useState } from "react"
-import { GameContext } from "../game-controller/GameController.js"
-import { AppContext } from "../game-controller/AppController.js"
+import { GameContext } from "../../game-controller/GameController.js"
+import { AppContext } from "../../game-controller/AppController.js"
 import * as Haptics from 'expo-haptics'
 
-import sequencer from "../../classes/sequencer/Sequencer.js"
-import audioMixer from "../../classes/audio/AudioMixer.js"
+import sequencer from "../../../classes/sequencer/Sequencer.js"
+import audioMixer from "../../../classes/audio/AudioMixer.js"
 
 const GameButton = ({note}) => {
     const gameContext = useContext(GameContext)
@@ -68,7 +68,8 @@ const getStyles = (isPressed, appContext) => {
             height: 100,
             width: 100, 
             backgroundColor: isPressed ? appContext.currentPalette.sixth : appContext.currentPalette.fourth,
-            margin: 10
+            margin: 10,
+            borderRadius: 7,
         }
     })
 }

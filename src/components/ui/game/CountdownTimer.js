@@ -1,30 +1,31 @@
 import { useEffect, useContext } from 'react'
 import { StyleSheet, Text, SafeAreaView } from 'react-native'
-import { GameContext } from '../game-controller/GameController'
+import { GameContext } from '../../game-controller/GameController'
 
 
-const ScoreDisplay = () => {
+const CountdownTimer = () => {
     const gameContext = useContext(GameContext)
 
     useEffect(()=>{
-    }, [gameContext.score])
+
+    }, [gameContext.seconds])
 
     return(
-        <SafeAreaView style={styles.scoreDisplay}>
-            <Text style={styles.scoreText}>SCORE: {gameContext.score}</Text>
+        <SafeAreaView style={styles.themePickerContainer}>
+            <Text style={styles.timerText}>{gameContext.seconds}</Text>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    scoreDisplay:{
+    themePickerContainer:{
         width: '100%',
         justifyContent: 'center'
     },
-    scoreText:{
+    timerText:{
         fontSize:40,
         fontWeight: 'bold'
     }
 })
 
-export default ScoreDisplay
+export default CountdownTimer
