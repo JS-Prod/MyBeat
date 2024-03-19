@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable  } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable, KeyboardAvoidingView  } from 'react-native'
 import { useEffect, useContext, useState } from 'react'
 import { AppContext } from '../game-controller/AppController.js'
 import { useNavigation } from '@react-navigation/native'
@@ -10,6 +10,8 @@ const LoginScreen = () => {
 
     const [usernameText, setUsernameText] = useState('')
     const [passwordText, setPasswordText] = useState('')
+
+    const [activeRequest, setActiveRequest] = useState(false)
 
     function UpdatePasswordText(text){
         setPasswordText(text)
@@ -24,18 +26,37 @@ const LoginScreen = () => {
     }
 
     async function SubmitLogin(){
-        const fetchData = async (username, password) => {
-            try {
-                const response  = await fetch('some-valid-url')
-                if(!response.ok) throw new Error('Submit login request not ok.')
-
-                const data = await response.json()
-                console.log('Data:', data)
-            } catch (err) {
-                console.error('Error sending login submission:', err)
+        if(!activeRequest){
+            setActiveRequest(true)
+            const fetchData = async (username, password) => {
+                try {
+                    const response = await fetch('https://mybeatserver.onrender.com/account/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                    })})
+                    console.log('Response Check:', JSON.stringify(response,0,2))
+                    if(!response.ok) {
+                        //handle invalid login attempts
+                        const data = await response.json()
+                        appContext.setLoginError(data.message)
+                    } else {
+                        const data = await response.json()
+                        console.log('Data:', data)
+                        appContext.setIsLoggedIn(true)
+                    }
+                } catch (err) {
+                    console.error('Error sending login submission:', err)
+                } finally {
+                    setActiveRequest(false)
+                }
             }
+            await fetchData(usernameText, passwordText)
         }
-        await fetchData(usernameText, passwordText)
     }
 
     useEffect(()=>{
@@ -67,11 +88,17 @@ const LoginScreen = () => {
                 <View style={getStyles(appContext).forgotPasswordPressArea}>
                     <Text style={getStyles(appContext).forgotPasswordText}>Forgot Password?</Text>
                 </View>
-            </View>
+                {appContext.loginError ? 
+                <View style={getStyles(appContext).errorContainer}>
+                    <Text style={getStyles(appContext).errorText}>{appContext.loginError}</Text>
+                </View>
+            :
+                null}
+                            
             <Pressable style={getStyles(appContext).createAccountPressArea} onPress={GoToRegister}>
                 <Text style={getStyles(appContext).createAccountText}>Create Account</Text>
             </Pressable>
-
+            </View>
         </SafeAreaView>
     )
 }
@@ -95,6 +122,7 @@ const getStyles = (appContext) => {
         credentialContainer:{
             position: 'absolute',
             width: '100%',
+            height: '100%',
             top: '50%'
         },
         credentialInput:{
@@ -128,14 +156,12 @@ const getStyles = (appContext) => {
         },
         createAccountText:{
             textAlign: 'center',
-            paddingTop: 35,
             color: appContext.currentPalette.first,
         },
         createAccountPressArea:{
-            position: 'absolute',
-            bottom: 0,
             width: '100%',
-            height: 75
+            top: '19%',
+            height: 70
         },
         forgotPasswordText:{
             color: appContext.currentPalette.first,
@@ -145,6 +171,15 @@ const getStyles = (appContext) => {
         forgotPasswordPressArea:{
             width: '100%',
             height: 75
+        },
+        errorContainer:{
+            justifyContent: 'center'
+        },
+        errorText:{
+            color: 'red',
+            textAlign: 'center',
+            fontSize: 14,
+            fontWeight: '400'
         }
     })
 }

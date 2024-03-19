@@ -7,6 +7,9 @@ export const AppContext = React.createContext()
 const AppController = ({children}) => {
     const [currentPalette, setCurrentPalette] = useState(colorPalettes['monochromatic-burnt-blue'])
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [loginError, setLoginError] = useState(null)
+    const [registerError, setRegisterError] = useState(null)
+
 
     useEffect(()=>{
         console.log('Current palette:', currentPalette)
@@ -18,7 +21,11 @@ const AppController = ({children}) => {
         currentPalette: currentPalette,
         setCurrentPalette: setCurrentPalette,
         isLoggedIn: isLoggedIn,
-        setIsLoggedIn: setIsLoggedIn
+        setIsLoggedIn: setIsLoggedIn,
+        loginError: loginError,
+        setLoginError: setLoginError,
+        registerError: registerError,
+        setRegisterError: setRegisterError,
     }}>
         {children}
     </AppContext.Provider>

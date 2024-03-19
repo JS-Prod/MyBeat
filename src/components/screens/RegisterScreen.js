@@ -33,13 +33,29 @@ const RegisterScreen = () => {
     }
 
     async function SubmitRegistration(){
+        console.log('Clicked register button')
         const fetchData = async (username, password, email) => {
             try {
-                const response  = await fetch('some-valid-url')
-                if(!response.ok) throw new Error('Submit register request not ok.')
-
+                const response = await fetch('https://mybeatserver.onrender.com/account/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        email: email
+                })})   
+                console.log('Response:', JSON.stringify(response))
                 const data = await response.json()
                 console.log('Data:', data)
+                if(!response.ok) {
+                    appContext.setRegisterError(data.message)
+                    //error handling and feedback
+                } else {
+
+                }
+
             } catch (err) {
                 console.error('Error sending register submission:', err)
             }
@@ -76,10 +92,16 @@ const RegisterScreen = () => {
                 <Pressable style={getStyles(appContext).button} onPress={SubmitRegistration}>
                     <Text style={getStyles(appContext).buttonText}>Register</Text>
                 </Pressable>
+                {appContext.registerError ? 
+                <View style={getStyles(appContext).errorContainer}>
+                    <Text style={getStyles(appContext).errorText}>{appContext.registerError}</Text>
+                </View>
+            :
+                null}
+                 <Pressable  style={getStyles(appContext).loginPressArea} onPress={GoToLogin}>
+                    <Text style={getStyles(appContext).login}>Have an account? Login.</Text>
+                </Pressable>
             </View>
-            <Pressable  style={getStyles(appContext).loginPressArea} onPress={GoToLogin}>
-                <Text style={getStyles(appContext).login}>Have an account? Login.</Text>
-            </Pressable>
         </View>
     )
 }
@@ -94,8 +116,9 @@ const getStyles = (appContext) => {
             justifyContent: 'center'
         },
         credentialContainer:{
-            position: 'absolute',
+            flex: 1,
             width: '100%',
+            height: '100%',
             top: '40%'
         },
         credentialInput:{
@@ -136,14 +159,21 @@ const getStyles = (appContext) => {
         },
         login:{
             textAlign: 'center',
-            paddingTop: 35,
             color: appContext.currentPalette.first,
         },
         loginPressArea:{
-            position: 'absolute',
-            bottom: 0,
             width: '100%',
-            height: 75
+            top: '20%',
+            height: 70
+        },
+        errorContainer:{
+            justifyContent: 'center'
+        },
+        errorText:{
+            color: 'red',
+            textAlign: 'center',
+            fontSize: 14,
+            fontWeight: '400'
         }
     })
 }
