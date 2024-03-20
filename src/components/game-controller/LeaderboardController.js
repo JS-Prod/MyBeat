@@ -35,7 +35,8 @@ const LeaderboardController = ({children}) => {
     const [leaderboardScores, setLeaderboardScores] = useState(testState)
 
     useEffect(()=>{
-    },[])
+        console.log('USER SCORES:', userScores)
+    },[userScores.length])
 
     return(
     <LeaderboardContext.Provider value={{

@@ -1,17 +1,21 @@
 import { StyleSheet, Text, View, SafeAreaView, TextInput, Pressable, KeyboardAvoidingView  } from 'react-native'
 import { useEffect, useContext, useState } from 'react'
 import { AppContext } from '../game-controller/AppController.js'
+import { LeaderboardContext } from '../game-controller/LeaderboardController.js'
 import { useNavigation } from '@react-navigation/native'
 
+import ForgotPasswordModal from '../ui/modals/ForgotPasswordModal.js'
 
 const LoginScreen = () => {
     const appContext = useContext(AppContext)
+    const leaderboardContext = useContext(LeaderboardContext)
+
     const navigator = useNavigation()
 
     const [usernameText, setUsernameText] = useState('')
     const [passwordText, setPasswordText] = useState('')
 
-    const [activeRequest, setActiveRequest] = useState(false)
+    const [loginDynamicText, setLoginDynamicText] = useState('Login')
 
     function UpdatePasswordText(text){
         setPasswordText(text)
@@ -21,13 +25,14 @@ const LoginScreen = () => {
         setUsernameText(text)
     }
 
-    function GoToRegister(){
-        navigator.navigate('Register')
+    function OpenPasswordResetModal(){
+        console.log('Pressing open button.')
+        appContext.setShowResetModal(true)
     }
 
     async function SubmitLogin(){
-        if(!activeRequest){
-            setActiveRequest(true)
+        if(!appContext.hasActiveRequest){
+            appContext.setHasActiveRequest(true)
             const fetchData = async (username, password) => {
                 try {
                     const response = await fetch('https://mybeatserver.onrender.com/account/login', {
@@ -39,20 +44,19 @@ const LoginScreen = () => {
                             username: username,
                             password: password
                     })})
-                    console.log('Response Check:', JSON.stringify(response,0,2))
+                    const data = await response.json()
+                    console.log('Data:', data)
                     if(!response.ok) {
                         //handle invalid login attempts
-                        const data = await response.json()
                         appContext.setLoginError(data.message)
                     } else {
-                        const data = await response.json()
-                        console.log('Data:', data)
                         appContext.setIsLoggedIn(true)
+                        leaderboardContext.setUserScores(data.scores)
                     }
                 } catch (err) {
                     console.error('Error sending login submission:', err)
                 } finally {
-                    setActiveRequest(false)
+                    appContext.setHasActiveRequest(false)
                 }
             }
             await fetchData(usernameText, passwordText)
@@ -63,9 +67,30 @@ const LoginScreen = () => {
         console.log('Rerender login screen for palette change.')
     },[appContext.currentPalette.name])
 
+    useEffect(()=>{
+        if(appContext.hasActiveRequest){
+            let interval = null
+            setLoginDynamicText('Waiting')
+            interval = setInterval(()=>{
+                setLoginDynamicText(prev => prev + '.')
+            },500)
+            return () => {
+                clearInterval(interval)
+            }
+        } else {
+            setLoginDynamicText('Login')
+        }
+    },[appContext.hasActiveRequest])
+
+    useEffect(()=>{
+        if(loginDynamicText.length > 11) setLoginDynamicText('Waiting')
+    },[loginDynamicText.length])
+
     return (
         <SafeAreaView style={getStyles(appContext).loginScreen}>
-            <Text style={getStyles(appContext).gameTitle}>MyBeat</Text>
+            <View style={getStyles(appContext).loginScreen}>
+                <Text style={getStyles(appContext).gameTitle}>MyBeat</Text>
+            </View>
             <View style={getStyles(appContext).credentialContainer}>
                 <TextInput 
                     style={getStyles(appContext).credentialInput}
@@ -74,7 +99,7 @@ const LoginScreen = () => {
                     value={usernameText}
                     onChangeText={UpdateUsernameText}
                 />
-                 <TextInput 
+                <TextInput 
                     style={getStyles(appContext).credentialInput}
                     autoCorrect={false}
                     placeholder='Password'
@@ -83,21 +108,24 @@ const LoginScreen = () => {
                     secureTextEntry
                 />
                 <Pressable style={getStyles(appContext).button} onPress={SubmitLogin}>
-                    <Text style={getStyles(appContext).buttonText}>Login</Text>
+                    <Text style={getStyles(appContext).buttonText}>{loginDynamicText}</Text>
                 </Pressable>
-                <View style={getStyles(appContext).forgotPasswordPressArea}>
+                <Pressable style={getStyles(appContext).forgotPasswordPressArea} onPress={OpenPasswordResetModal}>
                     <Text style={getStyles(appContext).forgotPasswordText}>Forgot Password?</Text>
-                </View>
-                {appContext.loginError ? 
+                </Pressable>
+
+                <ForgotPasswordModal />
+
                 <View style={getStyles(appContext).errorContainer}>
-                    <Text style={getStyles(appContext).errorText}>{appContext.loginError}</Text>
+                    {appContext.loginError ? 
+                        <Text style={getStyles(appContext).errorText}>{appContext.loginError}</Text>
+                        :
+                        null
+                    }                       
                 </View>
-            :
-                null}
-                            
-            <Pressable style={getStyles(appContext).createAccountPressArea} onPress={GoToRegister}>
-                <Text style={getStyles(appContext).createAccountText}>Create Account</Text>
-            </Pressable>
+                <Pressable style={getStyles(appContext).footerPressArea} onPress={()=>{navigator.navigate('Register')}}>
+                    <Text style={getStyles(appContext).footerText}>Create Account</Text>
+                </Pressable>
             </View>
         </SafeAreaView>
     )
@@ -109,21 +137,18 @@ const getStyles = (appContext) => {
             width: '100%',
             height: '100%',
             backgroundColor: appContext.currentPalette.sixth,
-            alignItems: 'center',
             justifyContent: 'flex-end',
-            paddingBottom: 100
         },
         gameTitle:{
-            position: 'absolute',
-            top: '20%',
+            top: '30%',
             fontSize: 70,
-            color: appContext.currentPalette.third
+            color: appContext.currentPalette.third,
+            textAlign: 'center'
         },
         credentialContainer:{
-            position: 'absolute',
             width: '100%',
             height: '100%',
-            top: '50%'
+            top: '40%',
         },
         credentialInput:{
             width: '100%',
@@ -148,20 +173,11 @@ const getStyles = (appContext) => {
             marginBottom:10,
         },
         buttonText:{
-            color: 'white',
+            color: appContext.currentPalette.third,
             fontSize: 16,
             fontWeight: 'bold',
             textAlign: 'center',
             lineHeight: 50
-        },
-        createAccountText:{
-            textAlign: 'center',
-            color: appContext.currentPalette.first,
-        },
-        createAccountPressArea:{
-            width: '100%',
-            top: '19%',
-            height: 70
         },
         forgotPasswordText:{
             color: appContext.currentPalette.first,
@@ -170,17 +186,29 @@ const getStyles = (appContext) => {
         },
         forgotPasswordPressArea:{
             width: '100%',
-            height: 75
+            height: 50,
         },
         errorContainer:{
-            justifyContent: 'center'
+            flexDirection: 'row',
+            flex: 0.5,
+            justifyContent: 'center',
         },
         errorText:{
-            color: 'red',
             textAlign: 'center',
-            fontSize: 14,
-            fontWeight: '400'
-        }
+            textAlignVertical: 'center',
+            fontSize: 16,
+            fontWeight: '400',
+            color: 'red'
+        },
+        footerText:{
+            textAlign: 'center',
+            paddingTop: 30,
+            color: appContext.currentPalette.first,
+        },
+        footerPressArea:{
+            flex: 1,
+            width: '100%',
+        },
     })
 }
 

@@ -1,26 +1,27 @@
 import GameController from './src/components/game-controller/GameController.js'
 import AppController from './src/components/game-controller/AppController.js'
 import LeaderboardController from './src/components/game-controller/LeaderboardController.js'
-import ScreenDrawer from './ScreenDrawer.js'
+import ScreenDrawer from './src/components/screens/ScreenDrawer.js'
+import { StatusBar } from 'expo-status-bar'
 
 
 //TODO
-//1. Add waiting state and haptic feedback after sending requests 
 //2. Impliment forgot password functionality
-
-//5. Verify and debug Login/Register flow
-//6. Set up and debug leaderboard api requests
-//7. Set up password reset
-//8. Integrate AD mob
+//3. Verify and debug Login/Register flow
+//4. Set up and debug leaderboard api requests
+//5. Integrate AD mob
+//6. Drop-down plaette selecter doesnt work on iOS
+//99. Deal with mobile keyboard displace position:aboslute, bottom:0 componetns
 
 export default function App() {
   return (
-        <AppController>
-        <LeaderboardController>
-        <GameController>
-            <ScreenDrawer />
-        </GameController>
-        </LeaderboardController>
-        </AppController>
+    <AppController>
+    <LeaderboardController>
+    <GameController>
+      <StatusBar style='light'/>     
+      <ScreenDrawer/>
+    </GameController>
+    </LeaderboardController>
+    </AppController>
   )
 }

@@ -1,8 +1,7 @@
-import { StyleSheet, Text, TextInput, Pressable, View } from 'react-native'
+import { StyleSheet, Text, TextInput, Pressable, View, SafeAreaView } from 'react-native'
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../game-controller/AppController'
 import { useNavigation } from '@react-navigation/native'
-
 
 const RegisterScreen = () => {
     const appContext = useContext(AppContext)
@@ -12,60 +11,80 @@ const RegisterScreen = () => {
     const [passwordText, setPasswordText] = useState('')
     const [emailText, setEmailText] = useState('')
 
-    function UpdateUsernameText(text){
-        setUsernameText(text)
-    }
+
+    const [registerDynamicText, setRegisterDynamicText] = useState('Register')
 
     function UpdatePasswordText(text){
         setPasswordText(text)
     }
 
+    function UpdateUsernameText(text){
+        setUsernameText(text)
+    }
+
     function UpdateEmailText(text){
         setEmailText(text)
     }
-    
-    useEffect(()=>{
-        console.log('Rerender register screen for palette change.')
-    }, [appContext.currentPalette.name])
-
-    function GoToLogin(){
-        navigator.navigate('Login')
-    }
 
     async function SubmitRegistration(){
-        console.log('Clicked register button')
-        const fetchData = async (username, password, email) => {
-            try {
-                const response = await fetch('https://mybeatserver.onrender.com/account/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password,
-                        email: email
-                })})   
-                console.log('Response:', JSON.stringify(response))
-                const data = await response.json()
-                console.log('Data:', data)
-                if(!response.ok) {
-                    appContext.setRegisterError(data.message)
-                    //error handling and feedback
-                } else {
+        if(!appContext.hasActiveRequest){
+            appContext.setHasActiveRequest(true)
+            const fetchData = async (username, password, email) => {
+                try {
+                    const response = await fetch('https://mybeatserver.onrender.com/account/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password,
+                            email: email
+                    })})
+                    const data = await response.json()
+                    console.log('Data:', data)
+                    if(!response.ok) {
+                        //handle invalid login attempts
+                        appContext.setRegisterError(data.message)
+                    } else {
 
+                    }
+                } catch (err) {
+                    console.error('Error sending registration submission:', err)
+                } finally {
+                    appContext.setHasActiveRequest(false)
                 }
-
-            } catch (err) {
-                console.error('Error sending register submission:', err)
             }
+            await fetchData(usernameText, passwordText, emailText)
         }
-        await fetchData(usernameText, passwordText, emailText)
     }
 
+    useEffect(()=>{
+        console.log('Rerender login screen for palette change.')
+    },[appContext.currentPalette.name])
+
+    useEffect(()=>{
+        if(appContext.hasActiveRequest){
+            let interval = null
+            setRegisterDynamicText('Waiting')
+            interval = setInterval(()=>{
+                setRegisterDynamicText(prev => prev + '.')
+            },500)
+            return () => {
+                clearInterval(interval)
+            }
+        } else {
+            setRegisterDynamicText('Register')
+        }
+    },[appContext.hasActiveRequest])
+
+    useEffect(()=>{
+        if(registerDynamicText.length > 10) setRegisterDynamicText('Waiting')
+    },[registerDynamicText.length])
+
     return (
-        <View style={getStyles(appContext).registerScreen}>
-            <Text style={getStyles(appContext).title}>Register</Text>
+        <SafeAreaView style={getStyles(appContext).loginScreen}>
+            <Text style={getStyles(appContext).gameTitle}>Register</Text>
             <View style={getStyles(appContext).credentialContainer}>
                 <TextInput 
                     style={getStyles(appContext).credentialInput}
@@ -75,14 +94,14 @@ const RegisterScreen = () => {
                     onChangeText={UpdateUsernameText}
                 />
                 <TextInput 
-                    secureTextEntry
                     style={getStyles(appContext).credentialInput}
                     autoCorrect={false}
                     placeholder='Password'
                     value={passwordText}
                     onChangeText={UpdatePasswordText}
+                    secureTextEntry
                 />
-                 <TextInput 
+                <TextInput 
                     style={getStyles(appContext).credentialInput}
                     autoCorrect={false}
                     placeholder='Email'
@@ -90,36 +109,41 @@ const RegisterScreen = () => {
                     onChangeText={UpdateEmailText}
                 />
                 <Pressable style={getStyles(appContext).button} onPress={SubmitRegistration}>
-                    <Text style={getStyles(appContext).buttonText}>Register</Text>
+                    <Text style={getStyles(appContext).buttonText}>{registerDynamicText}</Text>
                 </Pressable>
-                {appContext.registerError ? 
                 <View style={getStyles(appContext).errorContainer}>
-                    <Text style={getStyles(appContext).errorText}>{appContext.registerError}</Text>
+                    {appContext.registerError ? 
+                        <Text style={getStyles(appContext).errorText}>{appContext.registerError}</Text>
+                        :
+                        null
+                    }                       
                 </View>
-            :
-                null}
-                 <Pressable  style={getStyles(appContext).loginPressArea} onPress={GoToLogin}>
-                    <Text style={getStyles(appContext).login}>Have an account? Login.</Text>
+                <Pressable style={getStyles(appContext).footerPressArea} onPress={()=>{navigator.navigate('Login')}}>
+                    <Text style={getStyles(appContext).footerText}>Already have an account?</Text>
                 </Pressable>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
 const getStyles = (appContext) => {
     return StyleSheet.create({
-        registerScreen:{
+        loginScreen:{
             width: '100%',
             height: '100%',
             backgroundColor: appContext.currentPalette.sixth,
-            alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'flex-end',
+        },
+        gameTitle:{
+            top: '30%',
+            fontSize: 70,
+            color: appContext.currentPalette.third,
+            textAlign: 'center'
         },
         credentialContainer:{
-            flex: 1,
             width: '100%',
             height: '100%',
-            top: '40%'
+            top: '40%',
         },
         credentialInput:{
             width: '100%',
@@ -129,7 +153,6 @@ const getStyles = (appContext) => {
             borderWidth: 1,
             marginTop: 10,
             marginBottom: 10,
-     
             fontSize: 16,
             fontWeight: 'bold',
         },
@@ -145,38 +168,34 @@ const getStyles = (appContext) => {
             marginBottom:10,
         },
         buttonText:{
-            color: 'white',
+            color: appContext.currentPalette.third,
             fontSize: 16,
             fontWeight: 'bold',
             textAlign: 'center',
             lineHeight: 50
         },
-        title:{
-            position: 'absolute',
-            fontSize: 70,
-            top: '20%',
-            color: appContext.currentPalette.third
-        },
-        login:{
-            textAlign: 'center',
-            color: appContext.currentPalette.first,
-        },
-        loginPressArea:{
-            width: '100%',
-            top: '20%',
-            height: 70
-        },
         errorContainer:{
-            justifyContent: 'center'
+            flexDirection: 'row',
+            flex: 0.5,
+            justifyContent: 'center',
         },
         errorText:{
-            color: 'red',
             textAlign: 'center',
-            fontSize: 14,
-            fontWeight: '400'
-        }
+            textAlignVertical: 'center',
+            fontSize: 16,
+            fontWeight: '400',
+            color: 'red'
+        },
+        footerText:{
+            textAlign: 'center',
+            paddingTop: 16,
+            color: appContext.currentPalette.first,
+        },
+        footerPressArea:{
+            flex: 1,
+            width: '100%',
+        },
     })
 }
-
 
 export default RegisterScreen
