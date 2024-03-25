@@ -15,7 +15,7 @@ const UserScores = () => {
 
     return(
         <View style={getStyles(appContext).userScores}>
-            <Text style={getStyles(appContext).title}>My Scores</Text>
+            <Text style={getStyles(appContext).title}>My Highscores</Text>
             {leaderboardContext.userScores.map(({position, score, round}, index)=>(<ScoreSlot key={index} position={position} score={score} round={round}/>))}
         </View>
     )
@@ -29,7 +29,7 @@ const getStyles = (appContext) => StyleSheet.create({
         fontSize:26,
         fontWeight: '500',
         textAlign: 'center',
-        color: appContext.currentPalette.first
+        color: appContext.currentPalette.third
     },
     userScores:{
         width: '100%',

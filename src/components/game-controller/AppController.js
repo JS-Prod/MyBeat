@@ -5,13 +5,14 @@ import * as Haptics from 'expo-haptics'
 export const AppContext = React.createContext()
 
 const AppController = ({children}) => {
-
+    const [username, setUsername] = useState ('')
     const [currentPalette, setCurrentPalette] = useState(colorPalettes['monochromatic-burnt-blue'])
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [hasActiveRequest, setHasActiveRequest] = useState(false)
     const [loginError, setLoginError] = useState(null)
     const [registerError, setRegisterError] = useState(null)
     const [showResetModal, setShowResetModal] = useState(false)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     useEffect(()=>{
         console.log('Current palette:', currentPalette)
@@ -28,6 +29,8 @@ const AppController = ({children}) => {
 
     return(
     <AppContext.Provider value={{
+        username: username,
+        setUsername: setUsername,
         currentPalette: currentPalette,
         setCurrentPalette: setCurrentPalette,
         isLoggedIn: isLoggedIn,
@@ -40,6 +43,8 @@ const AppController = ({children}) => {
         setRegisterError: setRegisterError,
         showResetModal: showResetModal,
         setShowResetModal: setShowResetModal,
+        showSuccessModal: showSuccessModal,
+        setShowSuccessModal: setShowSuccessModal
     }}>
         {children}
     </AppContext.Provider>

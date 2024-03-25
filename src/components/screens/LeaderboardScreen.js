@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { useContext, useEffect } from 'react'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../game-controller/AppController.js'
 import { LeaderboardContext } from '../game-controller/LeaderboardController.js'
+import { useIsFocused } from '@react-navigation/native'
 import UserScores from '../ui/leaderboard/UserScores.js'
 import ScrollContainer from '../ui/leaderboard/ScrollContainer.js'
 
@@ -9,21 +10,28 @@ import ScrollContainer from '../ui/leaderboard/ScrollContainer.js'
 const SocialScreen = () => {
     const appContext = useContext(AppContext)
     const leaderboardContext = useContext(LeaderboardContext)
+    const isFocused = useIsFocused()
 
+    const [isLoading, setIsLoading] = useState(false)
+    
+    
     useEffect(()=>{
         console.log('Rerender leaderboard for palette change.')
     },[appContext.currentPalette.name])
+
+    useEffect(()=>{
+        if(isFocused) leaderboardContext.RefreshLeaderboard()
+    }, [isFocused])
+
+    useEffect(()=>{
+        if(leaderboardContext.hasActiveRequest) setIsLoading(true)
+        else setIsLoading(false)
+    }, [leaderboardContext.hasActiveRequest])
     
     return (
         <View style={getStyles(appContext).leaderboard}>
-            {/* <Text style={getStyles(appContext).title}>Leaderboard</Text> */}
-            {/* <View style={getStyles(appContext).headers}>
-                <Text>Position</Text>
-                <Text>Name</Text>
-                <Text>Score</Text>
-                <Text>Round</Text>
-            </View> */}
             <ScrollContainer/>
+            {isLoading ? <ActivityIndicator size={'large'} color={appContext.currentPalette.second}/> : null}
             <UserScores/>
         </View>
     )

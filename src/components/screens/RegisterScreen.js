@@ -2,6 +2,7 @@ import { StyleSheet, Text, TextInput, Pressable, View, SafeAreaView } from 'reac
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../game-controller/AppController'
 import { useNavigation } from '@react-navigation/native'
+import SuccessfulRegistrationModal from '../ui/modals/SuccessfulRegistrationModal'
 
 const RegisterScreen = () => {
     const appContext = useContext(AppContext)
@@ -44,10 +45,12 @@ const RegisterScreen = () => {
                     const data = await response.json()
                     console.log('Data:', data)
                     if(!response.ok) {
-                        //handle invalid login attempts
                         appContext.setRegisterError(data.message)
                     } else {
-
+                        setUsernameText('')
+                        setEmailText('')
+                        setPasswordText('')
+                        appContext.setShowSuccessModal(true)
                     }
                 } catch (err) {
                     console.error('Error sending registration submission:', err)
@@ -84,6 +87,7 @@ const RegisterScreen = () => {
 
     return (
         <SafeAreaView style={getStyles(appContext).loginScreen}>
+            <SuccessfulRegistrationModal/>
             <Text style={getStyles(appContext).gameTitle}>Register</Text>
             <View style={getStyles(appContext).credentialContainer}>
                 <TextInput 

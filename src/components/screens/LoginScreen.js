@@ -47,11 +47,13 @@ const LoginScreen = () => {
                     const data = await response.json()
                     console.log('Data:', data)
                     if(!response.ok) {
-                        //handle invalid login attempts
                         appContext.setLoginError(data.message)
                     } else {
                         appContext.setIsLoggedIn(true)
-                        leaderboardContext.setUserScores(data.scores)
+                        appContext.setUsername(username)
+                        leaderboardContext.setUserScores(data.scores.scoreArray)
+                        leaderboardContext.setLeaderboardScores(data.leaderboard.scoreArray)
+                        leaderboardContext.setIsRefreshing(true)
                     }
                 } catch (err) {
                     console.error('Error sending login submission:', err)
@@ -83,7 +85,7 @@ const LoginScreen = () => {
     },[appContext.hasActiveRequest])
 
     useEffect(()=>{
-        if(loginDynamicText.length > 11) setLoginDynamicText('Waiting')
+        if(loginDynamicText.length > 10) setLoginDynamicText('Waiting')
     },[loginDynamicText.length])
 
     return (

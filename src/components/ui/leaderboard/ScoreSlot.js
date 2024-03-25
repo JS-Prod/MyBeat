@@ -27,13 +27,13 @@ const getStyles = (appContext, username=null) => StyleSheet.create({
         paddingRight: 15,
         marginBottom: 2.5,
         marginTop: 2.5,
-        backgroundColor: username ? appContext.currentPalette.first : appContext.currentPalette.sixth,
+        backgroundColor: username ? appContext.currentPalette.third : appContext.currentPalette.sixth,
         justifyContent: 'space-between'
     },
     child:{
        fontSize: 19,
        fontWeight: '400',
-       color: !username ? appContext.currentPalette.first : appContext.currentPalette.sixth,
+       color: !username ? appContext.currentPalette.third : appContext.currentPalette.sixth,
     }
 })
 

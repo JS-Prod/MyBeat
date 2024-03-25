@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react"
-
+import React, { useState, useEffect, useRef, useContext } from "react"
+import { LeaderboardContext } from "./LeaderboardController"
+import { AppContext } from "./AppController"
 import sequencer from "../../classes/sequencer/Sequencer"
 import keyController from "../../classes/audio/KeyController"
 
@@ -17,9 +18,12 @@ const GameController = ({children}) => {
     const [playbackNote, setPlaybackNote] = useState(null)
     const [displayMessage, setDisplayMessage] = useState('')
     const [showDisplayMessage, setShowDisplayMessage] = useState(false)
+    const [roundsCompleted, setRoundsCompleted] = useState(0)
 
     const timeoutRef = useRef(null)
 
+    const leaderboardContext = useContext(LeaderboardContext)
+    const appContext = useContext(AppContext)
 
     function addTime(){
         setSeconds(prev => prev + 1)
@@ -30,8 +34,8 @@ const GameController = ({children}) => {
         sequencer.clearSequence()
         keyController.selectRandomKey()
         setScore(0)
+        setRoundsCompleted(0)
         setPlaybackNote(null)
-
         startRound()
     }
 
@@ -52,6 +56,7 @@ const GameController = ({children}) => {
         setCanPress(false)
         setDisplayMessage('CORRECT')
         setShowDisplayMessage(true)
+        setRoundsCompleted(prev => prev +1)
         clearTimeout(timeoutRef.current)
         timeoutRef.current = setTimeout(()=>{
             setDisplayMessage('NEXT ROUND')
@@ -67,6 +72,20 @@ const GameController = ({children}) => {
         clearTimeout(timeoutRef.current)    
         setDisplayMessage('GAME OVER')
         setShowDisplayMessage(true)
+        if(score > 0){
+            for(let i = 0; i < leaderboardContext.userScores.length; i++){
+                console.log('I:',i)
+                if(score > leaderboardContext.userScores[i].score || leaderboardContext.userScores.length < 5){
+                    setDisplayMessage('NEW HIGHSCORE')
+                    leaderboardContext.PostHighscore(appContext.username, score, roundsCompleted)
+                    break
+                } 
+            }
+            if(leaderboardContext.userScores.length === 0){
+                setDisplayMessage('NEW HIGHSCORE')
+                leaderboardContext.PostHighscore(appContext.username, score, roundsCompleted)
+            }
+        }
     }
 
     useEffect(()=>{
@@ -104,7 +123,6 @@ const GameController = ({children}) => {
 
     useEffect(()=>{
         if(playbackNote?.index <= 0){
-            console.log('Final note. Set to Player turn.')
             setIsPlayerTurn(true)
         } 
     },[playbackNote?.index])
@@ -113,6 +131,8 @@ const GameController = ({children}) => {
     <GameContext.Provider value={{
         score: score, 
         setScore: setScore,
+        roundsCompleted: roundsCompleted,
+        setRoundsCompleted: setRoundsCompleted,
         canPress: canPress,
         setCanPress: setCanPress,
         isPlayerTurn: isPlayerTurn,
