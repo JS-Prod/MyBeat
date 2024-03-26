@@ -12,9 +12,11 @@ import a from '../../../assets/audio-files/piano/a2.wav'
 import asharp from '../../../assets/audio-files/piano/a#2.wav'
 import b from '../../../assets/audio-files/piano/b2.wav'
 import fail from '../../../assets/audio-files/piano/fail.wav'
+import audioLogo from '../../../assets/audio-files/WirmiAudioLogo.mp3'
 
 const soundLibrary = {
     'testClick1': testClick,
+    'audioLogo': audioLogo,
     'c': c,
     'c#': csharp,
     'd': d,

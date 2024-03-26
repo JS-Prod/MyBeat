@@ -2,8 +2,8 @@ import { StyleSheet, SafeAreaView } from 'react-native'
 import { useEffect, useContext} from 'react'
 import { AppContext } from '../game-controller/AppController.js'
 
-import ThemePicker from '../ui/ThemePicker'
-import PaletteViewer from '../ui/PaletteViewer'
+import ThemePicker from '../ui/settings/ThemePicker.js'
+import PaletteViewer from '../ui/settings/PaletteViewer.js'
 
 const SettingsScreen = () => {
    const appContext = useContext(AppContext)

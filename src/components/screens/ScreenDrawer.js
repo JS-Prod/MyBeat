@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { Pressable, View, Text, Image} from 'react-native'
 
+import LogoScreen from './LogoScreen.js'
 import HomeScreen from './HomeScreen.js'
 import LoginScreen from './LoginScreen.js'
 import RegisterScreen from './RegisterScreen.js'
@@ -65,6 +66,7 @@ const ScreenDrawer = () => {
       <ValidateDrawer.Navigator screenOptions={{backBehavior: 'none', 
                                                 swipeEnabled: false,
                                                 headerShown: false}}>
+        <ValidateDrawer.Screen name='Logo' component={LogoScreen}/>
         <ValidateDrawer.Screen name='Login' component={LoginScreen}/>
         <ValidateDrawer.Screen name='Register' component={RegisterScreen}/>
       </ValidateDrawer.Navigator>}

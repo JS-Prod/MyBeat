@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { AppContext } from '../game-controller/AppController'
+import { AppContext } from '../../game-controller/AppController'
 
 import DropDownPicker from 'react-native-dropdown-picker'
-import colorPalettes from '../../classes/colors/ColorPalettes'
+import colorPalettes from '../../../classes/colors/ColorPalettes'
 
 const ThemePicker = () => {
     const appContext = useContext(AppContext)

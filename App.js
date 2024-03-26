@@ -6,12 +6,10 @@ import { StatusBar } from 'expo-status-bar'
 
 
 //TODO
-//2. Impliment forgot password functionality
-//3. Verify and debug Login/Register flow
-//4. Set up and debug leaderboard api requests
+//0. Splash screen for logo + theme
+//1. Add playback speed and game speed control in settings 
 //5. Integrate AD mob
-//6. Drop-down plaette selecter doesnt work on iOS
-//99. Deal with mobile keyboard displace position:aboslute, bottom:0 componetns
+//6. Drop-down plaette selecter/audio playback/haptics arent working on iOS
 
 export default function App() {
   return (

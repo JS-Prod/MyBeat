@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native"
 import { useContext } from "react"
-import { AppContext } from "../game-controller/AppController.js"
+import { AppContext } from "../../game-controller/AppController.js"
 
 const PaletteViewer = () => {
     const appContext = useContext(AppContext)
